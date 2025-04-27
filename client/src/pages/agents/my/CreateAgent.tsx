@@ -8,6 +8,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import useAgentsUtils from "@/hooks/useAgentsUtils";
 import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 const formSchema = z.object({
 	name: z.string().min(1, "Name of the agent is required"),
@@ -23,6 +25,7 @@ const CreateAgent = () => {
 	const [isSaving, setIsSaving] = useState<boolean>(false);
 
 	const { createAgent } = useAgentsUtils();
+	const navigate = useNavigate();
 
 	const formMethods = useForm<z.infer<typeof formSchema>>({ resolver: zodResolver(formSchema), defaultValues: { name: "", username: "", summary: "", description: "", prompt: "", bio: [], topics: [] } });
 
@@ -47,9 +50,16 @@ const CreateAgent = () => {
 		try {
 			const resp = await createAgent(infoData);
 
-			console.log("resp", resp);
+			if (resp?.status) {
+				toast.success("Agent Saved Successfully");
+				reset();
+				navigate("/app/agents/my");
+			} else {
+				toast.error("Unable to save an agent at the moment");
+			}
 		} catch (err) {
 			console.log("err", err);
+			toast.error("Unable to save an agent at the moment");
 		} finally {
 			setIsSaving(false);
 		}

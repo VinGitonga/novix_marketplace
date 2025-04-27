@@ -1,4 +1,4 @@
-export const ELIZA_BASE_URL = "http://localhost:3001/api";
+export const ELIZA_BASE_URL = "http://localhost:3000/api";
 export const createAgentDefaults = {
 	plugins: ["@elizaos/plugin-sql", "@elizaos/plugin-openai"],
 	settings: {

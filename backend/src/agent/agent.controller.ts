@@ -1,4 +1,4 @@
-import { Body, Controller, HttpStatus, Logger, Post, Res } from "@nestjs/common";
+import { Body, Controller, Get, HttpStatus, Logger, Param, Post, Res } from "@nestjs/common";
 import { AgentService } from "./agent.service";
 import { CreateAgentDto } from "./dto/create-agent.dto";
 import { AppReply } from "src/types/ApiResponse";
@@ -15,6 +15,28 @@ export class AgentController {
 			await this.agentService.createNewAgent(body);
 
 			return res.status(HttpStatus.CREATED).json({ status: "success", msg: "Created an Agent" });
+		} catch (err) {
+			throw new CustomBadRequestException();
+		}
+	}
+
+	@Get("all")
+	async getAllCreatedAgents(@Res() res: AppReply) {
+		try {
+			const allAgents = await this.agentService.getAllCreatedAgents();
+
+			return res.status(HttpStatus.OK).json({ status: "success", data: allAgents });
+		} catch (err) {
+			throw new CustomBadRequestException(err?.message);
+		}
+	}
+
+	@Get("profile/status/:elizaId")
+	async getElizaAgentStatus(@Param("elizaId") elizaId: string, @Res() res: AppReply) {
+		try {
+			const data = await this.agentService.getElizaStatus(elizaId);
+
+			return res.status(HttpStatus.OK).json({ status: "success", data });
 		} catch (err) {
 			throw new CustomBadRequestException();
 		}

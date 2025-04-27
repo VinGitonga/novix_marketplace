@@ -21,9 +21,84 @@ export class AgentService {
 			throw new Error(`Unable to create a new eliza agent`);
 		}
 
-		console.log("elizaData", elizaData);
+		// createdAt: 1745740187623
+		const recentAgent = await this.getMostRecentAgentByName(infoData.name); // Assuming 'name' is a field in CreateAgentDto
 
-		// const newAgent = await
+		if (!recentAgent) {
+			throw new Error(`Unable to retrieve the most recent agent for name: ${infoData.name}`);
+		}
+
+		const newAgent = this.agentModel.create({
+			...infoData,
+			elizaId: recentAgent.id,
+			elizaMetadata: recentAgent,
+		});
+
+		return (await newAgent).save();
+	}
+
+	async getAllCreatedAgents() {
+		return await this.agentModel.find({});
+	}
+
+	async getElizaStatus(elizaId: string) {
+		let config = {
+			method: "get",
+			maxBodyLength: Infinity,
+			url: `${ELIZA_BASE_URL}/agents/${elizaId}`,
+			headers: {
+				Accept: "application/json",
+			},
+		};
+		try {
+			const observableResp = this.httpService.request<{ success: boolean; data: { id: string; name: string; status: "active" | "inactive" } }>(config);
+
+			const resp = await firstValueFrom(observableResp);
+
+			if (resp?.data?.success) {
+				return resp?.data?.data.status
+			}
+
+			return null;
+		} catch (err) {
+			return null;
+		}
+	}
+
+	private async getMostRecentAgentByName(name: string) {
+		const agents = await this.getAllAgents(); // Fetch all agents
+
+		// Filter agents by name and sort them by createdAt
+		const filteredAgents = agents
+			.filter((agent) => agent.name === name) // Assuming 'name' is a field in your agent object
+			.sort((a, b) => b.createdAt - a.createdAt); // Sort by createdAt in descending order
+
+		return filteredAgents.length > 0 ? filteredAgents[0] : null; // Return the most recent agent or null if not found
+	}
+
+	private async getAllAgents() {
+		const config = {
+			method: "get",
+			maxBodyLength: Infinity,
+			url: `${ELIZA_BASE_URL}/agents`,
+			headers: {
+				Accept: "application/json",
+			},
+		};
+
+		try {
+			const observableResp = this.httpService.request<{ success: boolean; data: { agents: Record<string, any>[] } }>(config);
+
+			const resp = await firstValueFrom(observableResp);
+
+			if (resp?.data?.success) {
+				return resp?.data.data.agents;
+			}
+
+			return [];
+		} catch (err) {
+			return [];
+		}
 	}
 
 	private async saveElizaAgent(infoData: CreateAgentDto) {
@@ -47,12 +122,14 @@ export class AgentService {
 		};
 
 		try {
-			const observableResp = this.httpService.request<{ success: boolean; data: { character: object } }>(config);
+			const observableResp = this.httpService.request<{ success: boolean; data: { character: Record<string, any> } }>(config);
 			const resp = await firstValueFrom(observableResp);
 
-			console.dir(resp, { depth: null });
+			if (resp?.data?.success) {
+				return resp.data.data.character;
+			}
 
-			return resp;
+			return null;
 		} catch (err) {
 			return null;
 		}

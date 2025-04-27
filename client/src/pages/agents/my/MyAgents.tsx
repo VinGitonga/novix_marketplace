@@ -7,6 +7,11 @@ import { cn } from "@/lib/utils";
 import { VscDebugStart } from "react-icons/vsc";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useNavigate } from "react-router-dom";
+import { IAgent } from "@/types/Agent";
+import useSWR from "swr";
+import { IApiEndpoint } from "@/types/Api";
+import { swrFetcher } from "@/lib/api-client";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface AgentItem {
 	name: string;
@@ -16,43 +21,11 @@ interface AgentItem {
 }
 
 interface AgentItemProps {
-	item: AgentItem;
+	item: IAgent;
 }
 
-const agents: AgentItem[] = [
-	{
-		name: "Jacky",
-		username: "@jacky",
-		summary: "Stay ahead with live updates and predictive analytics.",
-		status: "active",
-	},
-	{
-		name: "Hellen",
-		username: "@hellen",
-		summary: "Stay ahead with live updates and predictive analytics.",
-		status: "inactive",
-	},
-	{
-		name: "Eric",
-		username: "@eric",
-		summary: "Stay ahead with live updates and predictive analytics.",
-		status: "active",
-	},
-	{
-		name: "Alice",
-		username: "@alice",
-		summary: "Stay ahead with live updates and predictive analytics.",
-		status: "inactive",
-	},
-	{
-		name: "Bob",
-		username: "@bob",
-		summary: "Stay ahead with live updates and predictive analytics.",
-		status: "active",
-	},
-];
-
 const MyAgents = () => {
+	const { data: loadedAgents, isLoading } = useSWR<IAgent[]>([IApiEndpoint.AGENTS_GET_ALL], swrFetcher, { keepPreviousData: true });
 	return (
 		<>
 			<title>My Agents - Novix</title>
@@ -61,18 +34,23 @@ const MyAgents = () => {
 				<p className="text-gray-300 text-sm">This page allows you to create and configure a new AI agent tailored to your needs.</p>
 			</div>
 			<div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-				<TooltipProvider>
-					{agents.map((item, idx) => (
-						<AgentItem item={item} key={idx} />
-					))}
-				</TooltipProvider>
+				{isLoading && [...Array.from({ length: 5 })].map((_, idx) => <SkeletonCard key={idx} />)}
+				{loadedAgents && loadedAgents?.length > 0 && (
+					<TooltipProvider>
+						{loadedAgents.map((item, idx) => (
+							<AgentItem item={item} key={idx} />
+						))}
+					</TooltipProvider>
+				)}
 			</div>
 		</>
 	);
 };
 
 const AgentItem = ({ item }: AgentItemProps) => {
-	const navigate = useNavigate()
+	const navigate = useNavigate();
+
+	const { data: status } = useSWR([`${IApiEndpoint.AGENTS_GET_ELIZA_STATUS}/${item.elizaId}`], swrFetcher, { keepPreviousData: true });
 	return (
 		<div className="bg-white/5 px-8 py-7 shadow-xl rounded-3xl">
 			<div className="flex items-center justify-between">
@@ -80,7 +58,7 @@ const AgentItem = ({ item }: AgentItemProps) => {
 					<div className="p-2 rounded-full border border-white/90 relative">
 						<Img src={"https://api.dicebear.com/9.x/adventurer/svg?seed=jacky"} className="w-10 h-10" />
 						<div className="absolute bottom-1 right-0">
-							<div className={cn("p-1.5 rounded-full", item.status === "active" ? "bg-green-500" : "bg-gray-400")}></div>
+							<div className={cn("p-1.5 rounded-full", status === "active" ? "bg-green-500" : "bg-gray-400")}></div>
 						</div>
 					</div>
 					<div className="space-y-2">
@@ -95,8 +73,8 @@ const AgentItem = ({ item }: AgentItemProps) => {
 			<Separator className="mt-2" />
 			<div className="flex items-center justify-between mt-2">
 				<Button className="rounded-2xl" size={"sm"} onClick={() => navigate("/app/agents/playground")}>
-					{item.status === "active" ? <RiSparklingLine className="mr-1" /> : <VscDebugStart className="mr-1" />}
-					{item.status === "active" ? "Message" : "Start"}
+					{status === "active" ? <RiSparklingLine className="mr-1" /> : <VscDebugStart className="mr-1" />}
+					{status === "active" ? "Message" : "Start"}
 				</Button>
 				<Tooltip>
 					<TooltipTrigger>
@@ -112,5 +90,17 @@ const AgentItem = ({ item }: AgentItemProps) => {
 		</div>
 	);
 };
+
+function SkeletonCard() {
+	return (
+		<div className="flex flex-col space-y-3">
+			<Skeleton className="h-[125px] w-[250px] rounded-xl" />
+			<div className="space-y-2">
+				<Skeleton className="h-4 w-[250px]" />
+				<Skeleton className="h-4 w-[200px]" />
+			</div>
+		</div>
+	);
+}
 
 export default MyAgents;
