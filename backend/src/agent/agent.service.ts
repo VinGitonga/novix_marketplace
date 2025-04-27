@@ -56,7 +56,32 @@ export class AgentService {
 			const resp = await firstValueFrom(observableResp);
 
 			if (resp?.data?.success) {
-				return resp?.data?.data.status
+				return resp?.data?.data.status;
+			}
+
+			return null;
+		} catch (err) {
+			return null;
+		}
+	}
+
+	async startElizaAgent(elizaAgentId: string) {
+		let config = {
+			method: "post",
+			maxBodyLength: Infinity,
+			url: `${ELIZA_BASE_URL}/agents/${elizaAgentId}`,
+			headers: {
+				Accept: "application/json",
+			},
+		};
+
+		try {
+			const observableResp = this.httpService.request<{ success: boolean; data: { id: string; name: string; status: "active" | "inactive" } }>(config);
+
+			const resp = await firstValueFrom(observableResp);
+
+			if (resp?.data?.success) {
+				return resp?.data?.data.status;
 			}
 
 			return null;

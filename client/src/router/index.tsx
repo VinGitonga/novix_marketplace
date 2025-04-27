@@ -44,7 +44,7 @@ const router = createBrowserRouter([
 				element: <CreateAgent />,
 			},
 			{
-				path: "agents/playground",
+				path: "agents/playground/:agentId",
 				element: <Playground />,
 			},
 		],

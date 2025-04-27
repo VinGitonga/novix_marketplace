@@ -41,4 +41,15 @@ export class AgentController {
 			throw new CustomBadRequestException();
 		}
 	}
+
+	@Post("eliza/start")
+	async startElizaAgent(@Body() body: { elizaId: string }, @Res() res: AppReply<string>) {
+		try {
+			const data = await this.agentService.startElizaAgent(body.elizaId);
+
+			return res.status(HttpStatus.OK).json({ status: "success", data });
+		} catch (err) {
+			throw new CustomBadRequestException();
+		}
+	}
 }

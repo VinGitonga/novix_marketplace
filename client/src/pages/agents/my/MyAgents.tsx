@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { SettingsIcon } from "lucide-react";
+import { Loader2, SettingsIcon } from "lucide-react";
 import { Img } from "react-image";
 import { RiSparklingLine } from "react-icons/ri";
 import { cn } from "@/lib/utils";
@@ -12,6 +12,9 @@ import useSWR from "swr";
 import { IApiEndpoint } from "@/types/Api";
 import { swrFetcher } from "@/lib/api-client";
 import { Skeleton } from "@/components/ui/skeleton";
+import useAgentsUtils from "@/hooks/useAgentsUtils";
+import { useState } from "react";
+import { toast } from "sonner";
 
 interface AgentItem {
 	name: string;
@@ -48,9 +51,31 @@ const MyAgents = () => {
 };
 
 const AgentItem = ({ item }: AgentItemProps) => {
+	const [isStarting, setIsStarting] = useState<boolean>(false);
+	const { startElizaAgent } = useAgentsUtils();
 	const navigate = useNavigate();
+	const { data: status, mutate } = useSWR([`${IApiEndpoint.AGENTS_GET_ELIZA_STATUS}/${item.elizaId}`], swrFetcher, { keepPreviousData: true });
 
-	const { data: status } = useSWR([`${IApiEndpoint.AGENTS_GET_ELIZA_STATUS}/${item.elizaId}`], swrFetcher, { keepPreviousData: true });
+	const onClickStartElizaAgent = async () => {
+		setIsStarting(true);
+		try {
+			const resp = await startElizaAgent(item.elizaId);
+			if (resp?.status === "success") {
+				toast.success("Agent Started Successfully");
+				mutate()
+			} else {
+				toast.error("Unable to start the agent");
+			}
+		} catch (err) {
+			toast.error("Unable to start the agent");
+		} finally {
+			setIsStarting(false);
+		}
+	};
+
+	const onClickMessage = async () => {
+		navigate(`/app/agents/playground/${item._id}`);
+	};
 	return (
 		<div className="bg-white/5 px-8 py-7 shadow-xl rounded-3xl">
 			<div className="flex items-center justify-between">
@@ -72,8 +97,8 @@ const AgentItem = ({ item }: AgentItemProps) => {
 			</div>
 			<Separator className="mt-2" />
 			<div className="flex items-center justify-between mt-2">
-				<Button className="rounded-2xl" size={"sm"} onClick={() => navigate("/app/agents/playground")}>
-					{status === "active" ? <RiSparklingLine className="mr-1" /> : <VscDebugStart className="mr-1" />}
+				<Button className="rounded-2xl" size={"sm"} disabled={isStarting} onClick={() => (status === "active" ? onClickMessage() : onClickStartElizaAgent())}>
+					{status === "active" ? <RiSparklingLine className="mr-1 w-5 h-5" /> : isStarting ? <Loader2 className="mr-1 w-5 h-5 animate-spin" /> : <VscDebugStart className="mr-1 w-5 h-5" />}
 					{status === "active" ? "Message" : "Start"}
 				</Button>
 				<Tooltip>

@@ -14,7 +14,16 @@ const useAgentsUtils = () => {
 		[post]
 	);
 
-	return { createAgent };
+	const startElizaAgent = useCallback(
+		async (elizaId: string) => {
+			const resp = await post<IApiResponse<"active" | "inactive">>({ endpoint: IApiEndpoint.AGENTS_ELIZA_START, data: { elizaId } });
+
+			return resp.data;
+		},
+		[post]
+	);
+
+	return { createAgent, startElizaAgent };
 };
 
 export default useAgentsUtils;

@@ -4,6 +4,7 @@ import { FC } from "react";
 import { GoArrowUp } from "react-icons/go";
 import { TbPencilDiscount } from "react-icons/tb";
 import { Img } from "react-image";
+import { useParams } from "react-router-dom";
 
 interface Agent {
 	name: string;
@@ -38,6 +39,7 @@ const agents: Agent[] = [
 ];
 
 const Playground = () => {
+	const params = useParams()
 	return (
 		<div>
 			<title>Playground - Novix</title>
