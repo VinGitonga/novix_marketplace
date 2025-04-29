@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connection WebSocket Client</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+  <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-2xl">
+    <h1 class="text-2xl font-bold text-gray-800 mb-6">Connection WebSocket Client</h1>
+
+    <!-- Connection Setup -->
+    <div class="mb-6">
+      <h2 class="text-xl font-semibold text-gray-700 mb-4">Connection Setup</h2>
+      <div class="space-y-4">
+        <div>
+          <label for="agentId" class="block text-sm font-medium text-gray-600">Agent ID</label>
+          <input
+            type="text"
+            id="agentId"
+            placeholder="Enter your agentId"
+            class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+        </div>
+        <div class="flex space-x-4">
+          <button
+            id="connectBtn"
+            type="button"
+            onclick="connectSocket()"
+            class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            Connect
+          </button>
+          <button
+            id="disconnectBtn"
+            onclick="disconnectSocket()"
+            type="button"
+            disabled
+            class="px-4 py-2 bg-gray-400 text-white rounded-md cursor-not-allowed"
+          >
+            Disconnect
+          </button>
+        </div>
+        <div id="connectionStatus" class="text-sm text-gray-600">Not connected</div>
+      </div>
+    </div>
+
+    <!-- Connection Management -->
+    <div class="mb-6">
+      <h2 class="text-xl font-semibold text-gray-700 mb-4">Connection Management</h2>
+      <div class="space-y-4">
+        <div>
+          <label for="targetTopicId" class="block text-sm font-medium text-gray-600">Target Inbound Topic ID</label>
+          <input
+            type="text"
+            id="targetTopicId"
+            placeholder="Enter target topic ID"
+            disabled
+            class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 cursor-not-allowed"
+          >
+        </div>
+        <button
+          id="initiateConnectionBtn"
+          onclick="initiateConnection()"
+          disabled
+          type="button"
+          class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
+        >
+          Initiate Connection
+        </button>
+        <div>
+          <label for="connectionId" class="block text-sm font-medium text-gray-600">Connection ID</label>
+          <input
+            type="text"
+            id="connectionId"
+            placeholder="Enter connection ID"
+            disabled
+            class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 cursor-not-allowed"
+          >
+        </div>
+        <div>
+          <label for="messageInput" class="block text-sm font-medium text-gray-600">Send Message</label>
+          <input
+            type="text"
+            id="messageInput"
+            placeholder="Type your message"
+            disabled
+            class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 cursor-not-allowed"
+          >
+        </div>
+        <div class="flex space-x-4">
+          <button
+            id="sendMessageBtn"
+            onclick="sendMessage()"
+            disabled
+            type="button"
+            class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
+          >
+            Send Message
+          </button>
+          <button
+            id="closeConnectionBtn"
+            onclick="closeConnection()"
+            disabled
+            type="button"
+            class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
+          >
+            Close Connection
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Connection Events -->
+    <div>
+      <h2 class="text-xl font-semibold text-gray-700 mb-4">Connection Events</h2>
+      <div
+        id="connectionLog"
+        class="bg-gray-50 p-4 h-64 overflow-y-auto border border-gray-200 rounded-md text-sm"
+      >
+        <div>[${new Date().toLocaleTimeString()}] Enter Agent ID and click Connect to start.</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js"></script>
+  <script>
+    let connectionSocket = null;
+    const serverUrl = 'http://localhost:7834'; // Update to your server URL
+
+    function logToConnection(message, className = '') {
+      const logArea = document.getElementById('connectionLog');
+      const logEntry = document.createElement('div');
+      logEntry.className = className;
+      logEntry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+      logArea.appendChild(logEntry);
+      logArea.scrollTop = logArea.scrollHeight;
+    }
+
+    function updateConnectionStatus(status, className = 'text-gray-600') {
+      const statusDiv = document.getElementById('connectionStatus');
+      statusDiv.textContent = status;
+      statusDiv.className = `text-sm ${className}`;
+    }
+
+    function connectSocket() {
+      const agentId = document.getElementById('agentId').value.trim();
+      if (!agentId) {
+        logToConnection('Error: Agent ID is required', 'text-red-600');
+        updateConnectionStatus('Not connected', 'text-red-600');
+        return;
+      }
+
+      connectionSocket = io(`${serverUrl}/api/connection`, {
+        auth: {
+          sessionID: `session-${Date.now()}`,
+          agentId,
+        },
+      });
+
+      connectionSocket.on('connect', () => {
+        logToConnection('Connected to connection namespace', 'text-green-600');
+        updateConnectionStatus('Connected', 'text-green-600');
+        enableInputs();
+      });
+
+      connectionSocket.on('connect_error', (error) => {
+        logToConnection(`Connection failed: ${error.message}`, 'text-red-600');
+        updateConnectionStatus('Connection failed', 'text-red-600');
+      });
+
+      connectionSocket.on('session', (data) => {
+        logToConnection(`Connection session: ${JSON.stringify(data)}`);
+      });
+
+      connectionSocket.on('connection', (data) => {
+        logToConnection(`New connection: ${JSON.stringify(data)}`, 'text-green-600');
+      });
+
+      connectionSocket.on('connection_close', (data) => {
+        logToConnection(`Connection closed: ${JSON.stringify(data)}`, 'text-green-600');
+      });
+
+      connectionSocket.on('hcs_message', (data) => {
+        logToConnection(`HCS message: ${JSON.stringify(data)}`, 'text-blue-600');
+      });
+
+      connectionSocket.on('error', (error) => {
+        logToConnection(`Connection error: ${error.message}`, 'text-red-600');
+      });
+
+      connectionSocket.on('disconnect', () => {
+        logToConnection('Disconnected from connection namespace', 'text-red-600');
+        updateConnectionStatus('Not connected', 'text-gray-600');
+        disableInputs();
+      });
+
+      document.getElementById('connectBtn').disabled = true;
+      document.getElementById('disconnectBtn').disabled = false;
+    }
+
+    function disconnectSocket() {
+      if (connectionSocket) {
+        connectionSocket.disconnect();
+        connectionSocket = null;
+      }
+      logToConnection('Disconnected from connection namespace');
+      updateConnectionStatus('Not connected', 'text-gray-600');
+      document.getElementById('connectBtn').disabled = false;
+      document.getElementById('disconnectBtn').disabled = true;
+      disableInputs();
+    }
+
+    function enableInputs() {
+      document.getElementById('targetTopicId').disabled = false;
+      document.getElementById('initiateConnectionBtn').disabled = false;
+      document.getElementById('connectionId').disabled = false;
+      document.getElementById('messageInput').disabled = false;
+      document.getElementById('sendMessageBtn').disabled = false;
+      document.getElementById('closeConnectionBtn').disabled = false;
+    }
+
+    function disableInputs() {
+      document.getElementById('targetTopicId').disabled = true;
+      document.getElementById('initiateConnectionBtn').disabled = true;
+      document.getElementById('connectionId').disabled = true;
+      document.getElementById('messageInput').disabled = true;
+      document.getElementById('sendMessageBtn').disabled = true;
+      document.getElementById('closeConnectionBtn').disabled = true;
+    }
+
+    async function initiateConnection() {
+      const targetTopicId = document.getElementById('targetTopicId').value.trim();
+      const agentId = document.getElementById('agentId').value.trim();
+      if (!targetTopicId || !agentId) {
+        logToConnection('Error: Target Topic ID and Agent ID are required', 'text-red-600');
+        return;
+      }
+
+      try {
+        const response = await fetch(`${serverUrl}/api/connections`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            targetInboundTopicId: targetTopicId,
+            memo: 'Test connection',
+            agentId,
+          }),
+        });
+        const result = await response.json();
+        if (response.ok) {
+          logToConnection(`Connection initiated: ${JSON.stringify(result)}`, 'text-green-600');
+        } else {
+          logToConnection(`Error initiating connection: ${result.error}`, 'text-red-600');
+        }
+      } catch (error) {
+        logToConnection(`Error initiating connection: ${error.message}`, 'text-red-600');
+      }
+    }
+
+    async function sendMessage() {
+      const connectionId = document.getElementById('connectionId').value.trim();
+      const message = document.getElementById('messageInput').value.trim();
+      const agentId = document.getElementById('agentId').value.trim();
+      if (!connectionId || !message || !agentId) {
+        logToConnection('Error: Connection ID, message, and Agent ID are required', 'text-red-600');
+        return;
+      }
+
+      try {
+        const response = await fetch(`${serverUrl}/api/connections/${connectionId}/message`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            message,
+            agentId,
+          }),
+        });
+        const result = await response.json();
+        if (response.ok) {
+          logToConnection(`Message sent: ${message}`, 'text-blue-600');
+        } else {
+          logToConnection(`Error sending message: ${result.error}`, 'text-red-600');
+        }
+      } catch (error) {
+        logToConnection(`Error sending message: ${error.message}`, 'text-red-600');
+      }
+      document.getElementById('messageInput').value = '';
+    }
+
+    async function closeConnection() {
+      const connectionId = document.getElementById('connectionId').value.trim();
+      const agentId = document.getElementById('agentId').value.trim();
+      if (!connectionId || !agentId) {
+        logToConnection('Error: Connection ID and Agent ID are required', 'text-red-600');
+        return;
+      }
+
+      try {
+        const response = await fetch(`${serverUrl}/api/connections/${connectionId}`, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            reason: 'Test close',
+            agentId,
+          }),
+        });
+        const result = await response.json();
+        if (response.ok) {
+          logToConnection(`Connection closed: ${JSON.stringify(result)}`, 'text-green-600');
+        } else {
+          logToConnection(`Error closing connection: ${result.error}`, 'text-red-600');
+        }
+      } catch (error) {
+        logToConnection(`Error closing connection: ${error.message}`, 'text-red-600');
+      }
+    }
+  </script>
+</body>
+</html>

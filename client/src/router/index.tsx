@@ -3,6 +3,7 @@ import HomeAltLayout from "@/layouts/HomeAltLayout";
 import CreateAgent from "@/pages/agents/my/CreateAgent";
 import MyAgents from "@/pages/agents/my/MyAgents";
 import Playground from "@/pages/agents/Playground";
+import ChatScreen from "@/pages/ChatScreen";
 import { ConnectionsList } from "@/pages/Connections";
 import Dashboard from "@/pages/Dashboard";
 import HomeScreen from "@/pages/HomeScreen";
@@ -21,6 +22,16 @@ const router = createBrowserRouter([
 			{
 				path: "agent-details",
 				element: <PublicAgentDetailsScreen />,
+			},
+		],
+	},
+	{
+		path: "chat",
+		element: <HomeAltLayout />,
+		children: [
+			{
+				path: "",
+				element: <ChatScreen />,
 			},
 		],
 	},

@@ -86,7 +86,7 @@ async function initializeAgent() {
     // Initialize HCS client
     hcsClient = new HCS10Client(operatorId, operatorKey, "testnet", {
       useEncryption: false,
-      registryUrl: registryUrl,
+      // registryUrl: registryUrl,
     });
 
     const monitoringHcsClient = new HCS10Client(

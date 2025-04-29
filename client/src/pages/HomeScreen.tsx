@@ -6,13 +6,13 @@ import { GoArrowUp } from "react-icons/go";
 import { Badge } from "@/components/ui/badge";
 import HomeLayout from "@/components/layouts/HomeLayout";
 import { FC, KeyboardEvent, useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
-import { Helmet } from "react-helmet-async";
+import { Link, useNavigate } from "react-router-dom";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import useDisclosure from "@/hooks/useDisclosure";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { io, Socket } from "socket.io-client";
 import { cn } from "@/lib/utils";
+import { useChatStore } from "@/hooks/store/useChatStore";
 
 interface Agent {
 	name: string;
@@ -83,6 +83,9 @@ const HomeScreen = () => {
 	const [sessionID, setSessionID] = useState<string | null>(null);
 	const maxCharacters = 2000;
 	const [isConnecting, setIsConnecting] = useState(true);
+	const { input: textInput, setInput: setTextInput } = useChatStore();
+
+	const navigate = useNavigate();
 
 	// Auto-scroll to bottom when messages change
 	useEffect(() => {
@@ -203,11 +206,20 @@ const HomeScreen = () => {
 		}
 	};
 
+	const submitChatInput = () => {
+		navigate("/chat");
+	};
+
+	const onKeyDownChatInput = (e: KeyboardEvent) => {
+		if (e.key === "Enter" && !e.shiftKey) {
+			e.preventDefault();
+			submitChatInput();
+		}
+	};
+
 	return (
 		<HomeLayout>
-			<Helmet>
-				<title>Novix</title>
-			</Helmet>
+			<title>Novix</title>
 			<div className="mt-10 text-white w-full">
 				<div className="mb-5">
 					<div className="flex items-center justify-center">
@@ -230,15 +242,20 @@ const HomeScreen = () => {
 						<textarea
 							placeholder="A chat AI agent that can allow me communicate with multiple people..."
 							className="w-full bg-transparent text-white/80 placeholder:text-[#949494]/50 text-sm focus:outline-none transition duration-200 ease-in-out"
+							value={textInput}
+							onChange={(e) => setTextInput(e.target.value)}
+							onKeyDown={onKeyDownChatInput}
 						/>
 						<div className="flex items-center justify-between mt-2">
 							<div className="flex items-center gap-2">
 								<Button size={"icon"} className="cursor-pointer bg-[#373737] hover:bg-gray-900">
 									<TbPencilDiscount />
 								</Button>
-								<Badge className="bg-[#373737] py-2 px-2.5 rounded-3xl text-xs text-[#7C7C7C]">0/20 Characters</Badge>
+								<Badge className="bg-[#373737] py-2 px-2.5 rounded-3xl text-xs text-[#7C7C7C]">
+									{textInput.length}/{maxCharacters} Characters
+								</Badge>
 							</div>
-							<Button onClick={onOpen} size={"icon"} className="cursor-pointer bg-[#373737] hover:bg-gray-900">
+							<Button onClick={submitChatInput} size={"icon"} className="cursor-pointer bg-[#373737] hover:bg-gray-900">
 								<GoArrowUp />
 							</Button>
 						</div>

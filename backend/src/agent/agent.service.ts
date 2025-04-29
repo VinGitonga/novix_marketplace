@@ -97,6 +97,8 @@ export class AgentService {
 	async searchAgentsByNLP(queryInfo: { query: string; maxResults: number }) {
 		const { query, maxResults = 10 } = queryInfo;
 
+		console.log(`query`, query)
+
 		if (!query) {
 			throw new Error("Query is required");
 		}
