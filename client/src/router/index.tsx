@@ -3,6 +3,7 @@ import HomeAltLayout from "@/layouts/HomeAltLayout";
 import CreateAgent from "@/pages/agents/my/CreateAgent";
 import MyAgents from "@/pages/agents/my/MyAgents";
 import Playground from "@/pages/agents/Playground";
+import { ConnectionsList } from "@/pages/Connections";
 import Dashboard from "@/pages/Dashboard";
 import HomeScreen from "@/pages/HomeScreen";
 import PublicAgentDetailsScreen from "@/pages/PublicAgentDetailsScreen";
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
 				path: "agents/playground/:agentId",
 				element: <Playground />,
 			},
+			{
+				path: "connections",
+				element: <ConnectionsList />
+			}
 		],
 	},
 ]);

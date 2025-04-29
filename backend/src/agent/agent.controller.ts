@@ -52,4 +52,26 @@ export class AgentController {
 			throw new CustomBadRequestException();
 		}
 	}
+
+	@Get("profile/details/:id")
+	async getAgentDetails(@Param("id") id: string, @Res() res: AppReply) {
+		try {
+			const data = await this.agentService.getAgentDetails(id);
+
+			return res.status(HttpStatus.OK).json({ status: "success", data });
+		} catch (err) {
+			throw new CustomBadRequestException();
+		}
+	}
+
+	@Post("search/by-nlp")
+	async searchAgentsByNLP(@Body() body: { query: string; maxResults: number }, @Res() res: AppReply) {
+		try {
+			const agents = await this.agentService.searchAgentsByNLP(body);
+
+			return res.status(HttpStatus.OK).json({ status: "success", data: agents });
+		} catch (err) {
+			throw new CustomBadRequestException();
+		}
+	}
 }

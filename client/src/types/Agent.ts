@@ -11,4 +11,5 @@ export interface IAgent {
 	elizaMetadata: Record<string, any>;
 	bio: string[];
 	topics: string[];
+	worldId?: string;
 }

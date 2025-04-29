@@ -1,11 +1,12 @@
 import { Link, useNavigate } from "react-router-dom";
-import ConnectBtn from "../web3/ConnectBtn";
 import { Img } from "react-image";
-import SignInDialog from "../modals/SignInDialog";
+import HashinalConnectBtn from "../web3/HashinalConnectBtn";
 import { Button } from "../ui/button";
+import { useAuthStore } from "@/hooks/store/useAuthStore";
 
 const HomeNavbar = () => {
 	const navigate = useNavigate();
+	const { account } = useAuthStore();
 	return (
 		<div className="flex items-center justify-between px-0 md:px-12 py-5">
 			<Link to={"/"}>
@@ -17,15 +18,18 @@ const HomeNavbar = () => {
 				</div>
 			</Link>
 			<div className="flex items-center gap-3">
-				<Button
-					variant={"secondary"}
-					onClick={() => {
-						navigate("/app");
-					}}>
-					Dashboard
-				</Button>
-				<SignInDialog />
-				<ConnectBtn />
+				{account && (
+					<Button
+						variant={"secondary"}
+						onClick={() => {
+							navigate("/app");
+						}}>
+						Dashboard
+					</Button>
+				)}
+				{/* <SignInDialog /> */}
+				{/* <ConnectBtn /> */}
+				<HashinalConnectBtn />
 			</div>
 		</div>
 	);

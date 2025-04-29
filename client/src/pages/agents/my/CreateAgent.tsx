@@ -10,6 +10,7 @@ import useAgentsUtils from "@/hooks/useAgentsUtils";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "@/hooks/store/useAuthStore";
 
 const formSchema = z.object({
 	name: z.string().min(1, "Name of the agent is required"),
@@ -26,6 +27,7 @@ const CreateAgent = () => {
 
 	const { createAgent } = useAgentsUtils();
 	const navigate = useNavigate();
+	const { account } = useAuthStore();
 
 	const formMethods = useForm<z.infer<typeof formSchema>>({ resolver: zodResolver(formSchema), defaultValues: { name: "", username: "", summary: "", description: "", prompt: "", bio: [], topics: [] } });
 
@@ -45,6 +47,7 @@ const CreateAgent = () => {
 			prompt: data.prompt,
 			bio: data.bio.map((item) => item.value),
 			topics: data.topics.map((item) => item.value),
+			owner: account?._id,
 		};
 		setIsSaving(true);
 		try {

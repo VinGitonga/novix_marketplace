@@ -7,6 +7,7 @@ import {
 } from '@elizaos/core';
 import dotenv from 'dotenv';
 import starterPlugin from './plugin';
+import { runExpress } from './server';
 
 /**
  * Represents the default character (Eliza) with her specific attributes and behaviors.
@@ -342,9 +343,11 @@ export const character: Character = {
   },
 };
 
-const initCharacter = ({ runtime }: { runtime: IAgentRuntime }) => {
+const initCharacter = async ({ runtime }: { runtime: IAgentRuntime }) => {
   logger.info('Initializing character');
   logger.info('Name: ', character.name);
+  console.log("Here")
+  await runExpress(runtime)
 };
 
 export const projectAgent: ProjectAgent = {

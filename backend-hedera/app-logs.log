@@ -1,0 +1,146 @@
+[2025-04-28 04:22:10.910 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-04-28 04:22:18.396 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-04-28 05:41:22.536 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-04-28 05:44:41.988 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-04-28 08:59:36.209 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-04-28 09:03:31.991 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-04-28 09:13:51.368 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-04-28 09:15:04.941 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-04-28 09:40:57.662 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-04-28 09:45:27.608 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-04-28 09:48:59.581 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-04-28 09:49:19.289 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-04-28 09:52:40.571 AM] [32minfo[39m: Socket.IO client connected: 5LEgdPAc-1peQr8SAAAE
+[2025-04-28 09:52:41.127 AM] [32minfo[39m: Socket.IO client connected: gt5x4TwMr-6BE4sGAAAG
+[2025-04-28 09:53:25.205 AM] [32minfo[39m: Socket.IO client connected: ESWCB3A0c3pusyBgAAAJ
+[2025-04-28 09:53:25.892 AM] [32minfo[39m: Socket.IO client connected: K0Kw6ryOyEkGkEPiAAAL
+[2025-04-28 09:55:04.300 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-04-28 09:55:04.525 AM] [32minfo[39m: Socket.IO client connected: Qfx79IAypXGf3LBnAAAB
+[2025-04-28 09:58:29.719 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-04-28 09:58:34.079 AM] [32minfo[39m: Socket.IO client connected: sARHXlO7tuGnJrmsAAAB
+[2025-04-28 10:12:12.919 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-04-28 10:12:17.982 AM] [32minfo[39m: Socket.IO client connected: jJL8ifM6RX_n_7NwAAAB
+[2025-04-28 10:17:11.074 AM] [32minfo[39m: Socket.IO client disconnected: jJL8ifM6RX_n_7NwAAAB
+[2025-04-28 10:17:59.802 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-04-28 10:19:00.883 AM] [32minfo[39m: Socket.IO client connected: kjX6rtGrEGbebDqNAAAE
+[2025-04-28 10:20:29.679 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-04-28 10:20:31.572 AM] [32minfo[39m: Socket.IO client connected: fA0ADrEZLvOw9Z9AAAAB
+[2025-04-28 10:21:22.795 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-04-28 10:21:26.644 AM] [32minfo[39m: Socket.IO client connected: nplCClvKOU1jYi4lAAAB
+[2025-04-28 10:21:30.419 AM] [31merror[39m: Error in message handler: Missing value for input variable `chat_history`
+
+Troubleshooting URL: https://js.langchain.com/docs/troubleshooting/errors/INVALID_PROMPT_INPUT/
+
+[2025-04-28 10:22:26.368 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-04-28 10:22:29.450 AM] [32minfo[39m: Socket.IO client connected: hpPHLRCKW5atnDSjAAAB
+[2025-04-28 10:22:33.858 AM] [31merror[39m: Error in message handler: input values have 2 keys, you must specify an input key or pass only 1 key as input
+[2025-04-28 10:33:47.553 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-04-28 10:33:47.919 AM] [32minfo[39m: Socket.IO client connected: 9zI1x7cyyS_y9qo_AAAB
+[2025-04-28 10:34:25.728 AM] [31merror[39m: Error in message handler: Missing value for input variable `chat_history`
+
+Troubleshooting URL: https://js.langchain.com/docs/troubleshooting/errors/INVALID_PROMPT_INPUT/
+
+[2025-04-28 10:37:15.653 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-04-28 10:37:17.938 AM] [32minfo[39m: Socket.IO client connected: fmPMJGK9lBTGdNTLAAAB
+[2025-04-28 10:37:22.017 AM] [31merror[39m: Error in message handler: Missing value for input variable `chat_history`
+
+Troubleshooting URL: https://js.langchain.com/docs/troubleshooting/errors/INVALID_PROMPT_INPUT/
+
+[2025-04-28 10:49:46.013 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-04-28 10:49:51.947 AM] [32minfo[39m: Socket.IO client connected: TKi3v9tcnyDvuSC4AAAB
+[2025-04-28 10:50:55.103 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-04-28 10:50:59.932 AM] [32minfo[39m: Socket.IO client connected: 7f0u8lAIGa9kEaP-AAAB
+[2025-04-28 10:51:04.200 AM] [31merror[39m: Error in message handler: input values have 2 keys, you must specify an input key or pass only 1 key as input
+[2025-04-28 10:53:36.367 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-04-28 10:53:39.849 AM] [32minfo[39m: Socket.IO client connected: fnApbBA06fNjtf3wAAAB
+[2025-04-28 10:56:42.997 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-04-28 10:56:46.927 AM] [32minfo[39m: Socket.IO client connected: wXxlKO85LzTnatAJAAAB
+[2025-04-28 10:59:05.154 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-04-28 10:59:10.526 AM] [32minfo[39m: Socket.IO client connected: 9LDtEoebZ8KWkoBYAAAB
+[2025-04-28 11:14:54.173 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-04-28 11:14:54.870 AM] [32minfo[39m: Socket.IO client connected: K2IRIWZgoJkZG65vAAAB
+[2025-04-28 11:31:03.322 AM] [32minfo[39m: Socket.IO client disconnected: K2IRIWZgoJkZG65vAAAB
+[2025-04-28 11:31:04.931 AM] [32minfo[39m: Socket.IO client connected: LZz_AsfBdGq3-fzWAAAE
+[2025-04-28 11:38:55.056 AM] [32minfo[39m: Socket.IO client disconnected: LZz_AsfBdGq3-fzWAAAE
+[2025-04-28 11:38:57.108 AM] [32minfo[39m: Socket.IO client connected: x7DDdU5n_e2FivogAAAH
+[2025-04-28 11:39:08.883 AM] [32minfo[39m: Socket.IO client disconnected: x7DDdU5n_e2FivogAAAH
+[2025-04-28 11:39:09.920 AM] [32minfo[39m: Socket.IO client connected: yo9TUe7llWwGW7tSAAAK
+[2025-04-28 11:39:50.898 AM] [32minfo[39m: Socket.IO client disconnected: yo9TUe7llWwGW7tSAAAK
+[2025-04-28 11:39:52.141 AM] [32minfo[39m: Socket.IO client connected: brtUGpAsDjxWKxYqAAAN
+[2025-04-28 11:45:54.768 AM] [32minfo[39m: Socket.IO client disconnected: brtUGpAsDjxWKxYqAAAN
+[2025-04-28 11:45:55.497 AM] [32minfo[39m: Socket.IO client connected: mmGMJmuWsj07BZlFAAAQ
+[2025-04-28 11:50:17.888 AM] [32minfo[39m: Socket.IO client disconnected: mmGMJmuWsj07BZlFAAAQ
+[2025-04-28 11:50:20.262 AM] [32minfo[39m: Socket.IO client connected: 0ohhvfgTyRbjVhr7AAAT
+[2025-04-28 11:52:37.180 AM] [32minfo[39m: Socket.IO client disconnected: 0ohhvfgTyRbjVhr7AAAT
+[2025-04-28 11:52:38.132 AM] [32minfo[39m: Socket.IO client connected: OmXuYC0_3NEHq6t7AAAW
+[2025-04-28 11:54:56.873 AM] [32minfo[39m: Socket.IO client disconnected: OmXuYC0_3NEHq6t7AAAW
+[2025-04-28 11:54:56.891 AM] [32minfo[39m: Socket.IO client connected: DL9bZ9kvPKhLjYzfAAAZ
+[2025-04-28 11:56:19.218 AM] [32minfo[39m: Socket.IO client disconnected: DL9bZ9kvPKhLjYzfAAAZ
+[2025-04-28 11:56:20.308 AM] [32minfo[39m: Socket.IO client connected: MVytcXOte8rFccxqAAAc
+[2025-04-28 11:57:24.893 AM] [32minfo[39m: Socket.IO client disconnected: MVytcXOte8rFccxqAAAc
+[2025-04-28 11:57:24.931 AM] [32minfo[39m: Socket.IO client connected: pubOR7knz1T_k52wAAAf
+[2025-04-28 11:58:53.867 AM] [32minfo[39m: Socket.IO client disconnected: pubOR7knz1T_k52wAAAf
+[2025-04-28 11:58:53.902 AM] [32minfo[39m: Socket.IO client connected: pDD8ATZNETe2BxEyAAAi
+[2025-04-28 11:59:04.320 AM] [32minfo[39m: Socket.IO client disconnected: pDD8ATZNETe2BxEyAAAi
+[2025-04-28 11:59:05.444 AM] [32minfo[39m: Socket.IO client connected: S9G-NyrtNjnle9k2AAAl
+[2025-04-28 12:00:47.441 PM] [32minfo[39m: Socket.IO client disconnected: S9G-NyrtNjnle9k2AAAl
+[2025-04-28 12:00:48.836 PM] [32minfo[39m: Socket.IO client connected: DRqt7fNHrFS-gqAqAAAo
+[2025-04-28 12:10:31.022 PM] [32minfo[39m: Socket.IO client disconnected: DRqt7fNHrFS-gqAqAAAo
+[2025-04-28 12:10:32.558 PM] [32minfo[39m: Socket.IO client connected: fVi4pmLW38HIwaJfAAAr
+[2025-04-28 12:21:17.492 PM] [32minfo[39m: Socket.IO client disconnected: fVi4pmLW38HIwaJfAAAr
+[2025-04-28 01:14:46.614 PM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-04-28 01:14:57.874 PM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-04-28 01:28:00.417 PM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-04-28 01:39:35.739 PM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-04-28 01:40:37.832 PM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-04-28 01:40:48.409 PM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-04-28 01:40:57.947 PM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-04-28 01:43:13.946 PM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-04-28 01:44:31.094 PM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-04-28 01:47:27.703 PM] [32minfo[39m: Socket.IO client connected: 7qInb7Qj0B6nRB2fAAAC
+[2025-04-28 01:53:32.533 PM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-04-28 01:53:35.434 PM] [32minfo[39m: Socket.IO client connected: hS4O6EJuNVwPG8QTAAAB
+[2025-04-28 02:17:50.892 PM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-04-28 02:17:53.607 PM] [32minfo[39m: Socket.IO client connected: MV36rpROZC_kqkBOAAAB
+[2025-04-28 03:26:35.398 PM] [32minfo[39m: Socket.IO client disconnected: MV36rpROZC_kqkBOAAAB
+[2025-04-28 03:26:37.677 PM] [32minfo[39m: Socket.IO client connected: Lvb754JVkAHCXn5YAAAE
+[2025-04-28 03:38:29.257 PM] [32minfo[39m: Socket.IO client disconnected: Lvb754JVkAHCXn5YAAAE
+[2025-04-28 03:38:31.160 PM] [32minfo[39m: Socket.IO client connected: aVHtdVBRmochBv7vAAAH
+[2025-04-28 03:44:04.013 PM] [32minfo[39m: Socket.IO client disconnected: aVHtdVBRmochBv7vAAAH
+[2025-04-28 05:15:03.446 PM] [32minfo[39m: Socket.IO client connected: KW732GVUAcS1ImgOAAAK
+[2025-04-28 05:15:46.939 PM] [32minfo[39m: Socket.IO client disconnected: KW732GVUAcS1ImgOAAAK
+[2025-04-28 05:53:10.042 PM] [32minfo[39m: Socket.IO client connected: xUQmIwUAmxJG9sROAAAN
+[2025-04-28 06:12:05.297 PM] [32minfo[39m: Socket.IO client disconnected: xUQmIwUAmxJG9sROAAAN
+[2025-04-28 06:12:09.654 PM] [32minfo[39m: Socket.IO client connected: er5C1TlifcMjSf07AAAQ
+[2025-04-28 09:30:34.084 PM] [32minfo[39m: Socket.IO client disconnected: er5C1TlifcMjSf07AAAQ
+[2025-04-28 09:30:42.656 PM] [32minfo[39m: Socket.IO client connected: 586LMYC0UAQcCyuRAAAS
+[2025-04-29 03:38:10.069 AM] [32minfo[39m: Socket.IO client disconnected: 586LMYC0UAQcCyuRAAAS
+[2025-04-29 03:38:12.427 AM] [32minfo[39m: Socket.IO client connected: PhHDcMUv6ZVa0Rx5AAAV
+[2025-04-29 03:48:53.224 AM] [32minfo[39m: Socket.IO client disconnected: PhHDcMUv6ZVa0Rx5AAAV
+[2025-04-29 03:48:55.473 AM] [32minfo[39m: Socket.IO client connected: FIjaicZef8ExbzbTAAAY
+[2025-04-29 03:50:01.211 AM] [32minfo[39m: Socket.IO client disconnected: FIjaicZef8ExbzbTAAAY
+[2025-04-29 03:50:03.540 AM] [32minfo[39m: Socket.IO client connected: 3sLE7g9nLoWIuEqIAAAb
+[2025-04-29 03:50:28.013 AM] [32minfo[39m: Socket.IO client disconnected: 3sLE7g9nLoWIuEqIAAAb
+[2025-04-29 03:50:29.267 AM] [32minfo[39m: Socket.IO client connected: QuY8WvCBakw0PUdiAAAe
+[2025-04-29 03:50:58.046 AM] [32minfo[39m: Socket.IO client disconnected: QuY8WvCBakw0PUdiAAAe
+[2025-04-29 03:50:59.391 AM] [32minfo[39m: Socket.IO client connected: jlLjIEiPi-n0DjuHAAAh
+[2025-04-29 03:53:12.680 AM] [32minfo[39m: Socket.IO client connected: uMiiR6ROWHRQrqJGAAAk
+[2025-04-29 03:54:00.330 AM] [32minfo[39m: Socket.IO client disconnected: uMiiR6ROWHRQrqJGAAAk
+[2025-04-29 04:10:57.181 AM] [32minfo[39m: Socket.IO client disconnected: jlLjIEiPi-n0DjuHAAAh
+[2025-04-29 04:11:00.641 AM] [32minfo[39m: Socket.IO client connected: PTl_t275fIyVG6ZmAAAn
+[2025-04-29 05:04:41.114 AM] [32minfo[39m: Socket.IO client disconnected: PTl_t275fIyVG6ZmAAAn
+[2025-04-29 05:04:45.583 AM] [32minfo[39m: Socket.IO client connected: 7D3qH_GU-IZvWbWYAAAq
+[2025-04-29 08:33:04.956 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-04-29 08:33:05.615 AM] [32minfo[39m: Socket.IO client connected: A16F_TED6s2T0g1WAAAB
+[2025-04-29 08:56:05.381 AM] [32minfo[39m: Socket.IO client connected: JZIQBWIkfhpT7cY3AAAE
+[2025-04-29 08:57:33.553 AM] [32minfo[39m: Socket.IO client disconnected: JZIQBWIkfhpT7cY3AAAE
+[2025-04-29 08:57:47.897 AM] [32minfo[39m: Socket.IO client connected: AZCTSIfsV8zfjIRkAAAH
+[2025-04-29 08:57:50.722 AM] [32minfo[39m: Socket.IO client disconnected: AZCTSIfsV8zfjIRkAAAH
+[2025-04-29 08:58:41.173 AM] [32minfo[39m: Socket.IO client connected: ZKDJZhEpk0OHmEV5AAAK
+[2025-04-29 08:58:46.745 AM] [32minfo[39m: Socket.IO client disconnected: ZKDJZhEpk0OHmEV5AAAK
+[2025-04-29 08:59:06.473 AM] [32minfo[39m: Socket.IO client connected: uyyay4kEao0sfGMVAAAN
+[2025-04-29 08:59:35.851 AM] [32minfo[39m: Socket.IO client disconnected: uyyay4kEao0sfGMVAAAN
+[2025-04-29 08:59:45.034 AM] [32minfo[39m: Socket.IO client connected: TwpO1Gqo34G7a67CAAAQ
+[2025-04-29 09:32:59.931 AM] [32minfo[39m: Socket.IO client disconnected: TwpO1Gqo34G7a67CAAAQ
+[2025-04-29 09:38:59.410 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-04-29 09:39:00.677 AM] [32minfo[39m: Socket.IO client connected: zDVQfr2Cbxj2yeS1AAAB

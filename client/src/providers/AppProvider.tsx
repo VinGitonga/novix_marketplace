@@ -3,14 +3,17 @@ import router from "@/router";
 import { HelmetProvider } from "react-helmet-async";
 import { RouterProvider } from "react-router-dom";
 import { Toaster } from "sonner";
+import HashinalWalletProvider from "./HashinalWalletProvider";
 
 const AppProvider = () => {
 	return (
 		<HelmetProvider>
-			<Web3ContextProvider>
-				<RouterProvider router={router} />
-			</Web3ContextProvider>
-			<Toaster />
+			<HashinalWalletProvider>
+				<Web3ContextProvider>
+					<RouterProvider router={router} />
+				</Web3ContextProvider>
+				<Toaster />
+			</HashinalWalletProvider>
 		</HelmetProvider>
 	);
 };

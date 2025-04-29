@@ -5,6 +5,9 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
 import configuration from "./config/configuration";
 import { MongooseModule } from "@nestjs/mongoose";
 import { AgentModule } from "./agent/agent.module";
+import { MoonscapeModule } from './moonscape/moonscape.module';
+import { ConnectionManagerModule } from './connection-manager/connection-manager.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
 	imports: [
@@ -17,6 +20,9 @@ import { AgentModule } from "./agent/agent.module";
 			inject: [ConfigService],
 		}),
 		AgentModule,
+		MoonscapeModule,
+		UsersModule,
+		// ConnectionManagerModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],

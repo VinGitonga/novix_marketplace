@@ -1,4 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { User } from "./user.entity";
+import mongoose from "mongoose";
 
 @Schema({ timestamps: true })
 export class Agent {
@@ -26,8 +28,16 @@ export class Agent {
 	@Prop()
 	elizaId: string;
 
+	@Prop({ required: false, default: null })
+	worldId: string;
+
 	@Prop({ type: Object })
 	elizaMetadata: Record<string, any>;
+
+	@Prop({ type: mongoose.Schema.Types.ObjectId, ref: "User" })
+	owner: User;
 }
 
 export const AgentSchema = SchemaFactory.createForClass(Agent);
+
+AgentSchema.index({ summary: "text", description: "text", topics: "text", bio: "text", prompt: "text", name: "text" });

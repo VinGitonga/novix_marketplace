@@ -2,9 +2,23 @@ import useDisclosure from "@/hooks/useDisclosure";
 import AppInput from "../form/AppInput";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
+import { useWallet } from "@/providers/HashinalWalletProvider";
+import useHCSUtils from "@/hooks/useHCSUtils";
 
 const SignInDialog = () => {
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+	const { browserHcsClient } = useWallet();
+	const { findRegistrations } = useHCSUtils();
+
+	const findAIAgents = async () => {
+		try {
+			const result = await findRegistrations({ network: "testnet" });
+			console.log("result", result);
+		} catch (err) {
+			console.log("err", err);
+		}
+	};
 	return (
 		<>
 			<Button variant={"secondary"} className="cursor-pointer dark" onClick={onOpen}>
@@ -19,7 +33,9 @@ const SignInDialog = () => {
 					<div className="space-y-5">
 						<AppInput label="Username" placeholder="@rabbitlabs" />
 					</div>
-					<DialogFooter></DialogFooter>
+					<DialogFooter>
+						<Button onClick={findAIAgents}>Save</Button>
+					</DialogFooter>
 				</DialogContent>
 			</Dialog>
 		</>

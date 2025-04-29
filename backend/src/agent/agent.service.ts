@@ -90,6 +90,26 @@ export class AgentService {
 		}
 	}
 
+	async getAgentDetails(id: string) {
+		return await this.agentModel.findById(id);
+	}
+
+	async searchAgentsByNLP(queryInfo: { query: string; maxResults: number }) {
+		const { query, maxResults = 10 } = queryInfo;
+
+		if (!query) {
+			throw new Error("Query is required");
+		}
+
+		const agents = await this.agentModel
+			.find({ $text: { $search: query } }, { score: { $meta: "textScore" } })
+			.sort({ score: { $meta: "textScore" } })
+			.limit(maxResults)
+			.lean();
+
+		return { results: agents, count: agents.length };
+	}
+
 	private async getMostRecentAgentByName(name: string) {
 		const agents = await this.getAllAgents(); // Fetch all agents
 

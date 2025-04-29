@@ -1,0 +1,32 @@
+{
+  "name": "backend-hedera",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start:dev": "tsx src/app.ts",
+    "dev": "nodemon --exec 'tsx src/app.ts' --ext ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@hashgraph/sdk": "^2.63.0",
+    "@hashgraphonline/standards-agent-kit": "git+https://github.com/hashgraph-online/standards-agent-kit.git",
+    "@hashgraphonline/standards-sdk": "^0.0.93",
+    "@langchain/core": "^0.3.49",
+    "@langchain/openai": "^0.5.7",
+    "axios": "^1.9.0",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "langchain": "^0.3.24",
+    "socket.io": "^4.8.1",
+    "winston": "^3.17.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.1",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.3"
+  }
+}
