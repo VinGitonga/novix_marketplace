@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Loader2, SettingsIcon } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { Img } from "react-image";
 import { RiSparklingLine } from "react-icons/ri";
 import { cn } from "@/lib/utils";
@@ -15,6 +15,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import useAgentsUtils from "@/hooks/useAgentsUtils";
 import { useState } from "react";
 import { toast } from "sonner";
+import UpdateAgentDialog from "@/components/modals/UpdateAgentDialog";
 
 interface AgentItem {
 	name: string;
@@ -62,7 +63,7 @@ const AgentItem = ({ item }: AgentItemProps) => {
 			const resp = await startElizaAgent(item.elizaId);
 			if (resp?.status === "success") {
 				toast.success("Agent Started Successfully");
-				mutate()
+				mutate();
 			} else {
 				toast.error("Unable to start the agent");
 			}
@@ -103,9 +104,7 @@ const AgentItem = ({ item }: AgentItemProps) => {
 				</Button>
 				<Tooltip>
 					<TooltipTrigger>
-						<Button className="dark" size={"icon"}>
-							<SettingsIcon />
-						</Button>
+						<UpdateAgentDialog agentData={item} />
 					</TooltipTrigger>
 					<TooltipContent>
 						<p>Configure</p>

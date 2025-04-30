@@ -1,8 +1,10 @@
-import { Body, Controller, Get, HttpStatus, Logger, Param, Post, Res } from "@nestjs/common";
+import { Body, Controller, Get, HttpStatus, Logger, Param, Post, Put, Res } from "@nestjs/common";
 import { AgentService } from "./agent.service";
 import { CreateAgentDto } from "./dto/create-agent.dto";
 import { AppReply } from "src/types/ApiResponse";
 import { CustomBadRequestException } from "src/exceptions";
+import { UpdateCreditsDTO } from "./dto/update-credits.dto";
+import { UpdatePricingDTO } from "./dto/update-pricing.dto";
 
 @Controller("api/agents")
 export class AgentController {
@@ -70,6 +72,28 @@ export class AgentController {
 			const agents = await this.agentService.searchAgentsByNLP(body);
 
 			return res.status(HttpStatus.OK).json({ status: "success", data: agents });
+		} catch (err) {
+			throw new CustomBadRequestException();
+		}
+	}
+
+	@Put("credits/update")
+	async updateCreditsForUser(@Body() body: UpdateCreditsDTO, @Res() res: AppReply) {
+		try {
+			const data = await this.agentService.updateCreditsForUser(body);
+
+			return res.status(HttpStatus.OK).json({ status: "success", data });
+		} catch (err) {
+			throw new CustomBadRequestException();
+		}
+	}
+
+	@Put("update/pricing")
+	async addPricingDataForAgent(@Body() body: UpdatePricingDTO, @Res() res: AppReply) {
+		try {
+			const data = await this.agentService.addPricingDataForAgent(body);
+
+			return res.status(HttpStatus.OK).json({ status: "success", data });
 		} catch (err) {
 			throw new CustomBadRequestException();
 		}

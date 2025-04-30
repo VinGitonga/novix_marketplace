@@ -1,9 +1,10 @@
 import { useCallback } from "react";
 import { useApi } from "./useApi";
 import { IApiEndpoint, IApiResponse } from "@/types/Api";
+import { IAgent } from "@/types/Agent";
 
 const useAgentsUtils = () => {
-	const { post } = useApi();
+	const { post, put } = useApi();
 
 	const createAgent = useCallback(
 		async (data: any) => {
@@ -23,7 +24,25 @@ const useAgentsUtils = () => {
 		[post]
 	);
 
-	return { createAgent, startElizaAgent };
+	const updatePricingData = useCallback(
+		async (price: number, credits: number, pricingModel: string, agentId: string) => {
+			const resp = await put<IApiResponse<IAgent>>({ endpoint: IApiEndpoint.AGENTS_UPDATE_PRICING, data: { price, credits, pricingModel, agentId } });
+
+			return resp.data;
+		},
+		[put]
+	);
+
+	const updateCreditsForUser = useCallback(
+		async (accountId: string, agentId: string, ownerId: string) => {
+			const resp = await put<IApiResponse<IAgent>>({ endpoint: IApiEndpoint.AGENTS_CREDITS_UPDATE, data: { accountId, agentId, ownerId } });
+
+			return resp.data;
+		},
+		[put]
+	);
+
+	return { createAgent, startElizaAgent, updatePricingData, updateCreditsForUser };
 };
 
 export default useAgentsUtils;

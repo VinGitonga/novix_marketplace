@@ -26,7 +26,7 @@ const AppInput = ({ label, value, setValue, placeholder, name, control, type = "
 					<FormControl>
 						<Input {...field} placeholder={placeholder} type={type} disabled={disabled} />
 					</FormControl>
-					{helperText && <FormDescription>{helperText}</FormDescription>}
+					{helperText && <FormDescription className="text-sm">{helperText}</FormDescription>}
 					<FormMessage />
 				</FormItem>
 			)}

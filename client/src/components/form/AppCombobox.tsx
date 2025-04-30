@@ -64,7 +64,7 @@ const AppCombobox = (props: AppComboboxProps) => {
 								</FormControl>
 							</PopoverTrigger>
 							<PopoverContent className="w-[400px] bg-[#010B0F] text-white p-0 font-inter">
-								<Command>
+								<Command className="bg-[#010B0F] text-white dark">
 									<CommandInput placeholder={placeholder} className="dark" />
 									<CommandList>
 										<CommandEmpty>No option found</CommandEmpty>

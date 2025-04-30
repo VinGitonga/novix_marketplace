@@ -6,12 +6,19 @@ import { Agent } from "src/entities/agent.entity";
 import { CreateAgentDto } from "./dto/create-agent.dto";
 import { createAgentDefaults, ELIZA_BASE_URL } from "src/constants";
 import { firstValueFrom } from "rxjs";
+import { UpdatePricingDTO } from "./dto/update-pricing.dto";
+import { Credits } from "src/entities/credits.entity";
+import { UpdateCreditsDTO } from "./dto/update-credits.dto";
+import { User } from "src/entities/user.entity";
+import { UsersService } from "src/users/users.service";
 
 @Injectable()
 export class AgentService {
 	constructor(
 		@InjectModel(Agent.name) private agentModel: Model<Agent>,
+		@InjectModel(Credits.name) private creditsModel: Model<Credits>,
 		private readonly httpService: HttpService,
+		private readonly userService: UsersService,
 	) {}
 
 	async createNewAgent(infoData: CreateAgentDto) {
@@ -97,7 +104,7 @@ export class AgentService {
 	async searchAgentsByNLP(queryInfo: { query: string; maxResults: number }) {
 		const { query, maxResults = 10 } = queryInfo;
 
-		console.log(`query`, query)
+		console.log(`query`, query);
 
 		if (!query) {
 			throw new Error("Query is required");
@@ -110,6 +117,58 @@ export class AgentService {
 			.lean();
 
 		return { results: agents, count: agents.length };
+	}
+
+	async addPricingDataForAgent(body: UpdatePricingDTO) {
+		const { agentId, ...data } = body;
+
+		const updatedAgentData = await this.agentModel.findByIdAndUpdate(agentId, { $set: { ...data } }, { new: true });
+
+		return updatedAgentData;
+	}
+
+	async updateCreditsForUser(body: UpdateCreditsDTO) {
+		const { accountId, agentId, ownerId } = body;
+
+		const existingCredits = await this.creditsModel.findOne({ accountId: accountId, agentId });
+		let owner: User | null = null;
+
+		if (ownerId) {
+			owner = await this.userService.getUserById(ownerId);
+		}
+
+		if (existingCredits) {
+			// we update the new credits
+			const count = existingCredits.count;
+
+			let newCount = count - 1;
+
+			if (newCount <= 0) {
+				newCount = 0;
+			}
+
+			// if owner dont decrement
+			if (owner && owner.accountId === accountId) {
+				return existingCredits;
+			}
+
+			return await this.creditsModel.findByIdAndUpdate(existingCredits._id, { $set: { count: newCount } });
+		}
+
+		// create new credits
+		const agentDetails = await this.agentModel.findById(agentId);
+
+		const count = agentDetails.credits;
+
+		const newCreditsData = {
+			count: count - 1,
+			accountId: accountId,
+			agentId,
+		};
+
+		const newCredits = (await this.creditsModel.create(newCreditsData)).save();
+
+		return newCredits;
 	}
 
 	private async getMostRecentAgentByName(name: string) {

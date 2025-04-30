@@ -21,7 +21,9 @@ export const enum IApiEndpoint {
 	AGENTS_ELIZA_START = "agents/eliza/start",
 	AGENTS_GET_DETAILS = "agents/profile/details",
 	ACCOUNT_CREATE = "users/create",
-	ACCOUNT_GET_PROFILE = "users/profile"
+	ACCOUNT_GET_PROFILE = "users/profile",
+	AGENTS_CREDITS_UPDATE = "agents/credits/update",
+	AGENTS_UPDATE_PRICING = "agents/update/pricing"
 }
 
 export interface IMethodParams {

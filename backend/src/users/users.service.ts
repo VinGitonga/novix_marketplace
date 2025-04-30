@@ -24,4 +24,8 @@ export class UsersService {
 	async getUserByAccountId(accountId: string) {
 		return await this.userModel.findOne({ accountId });
 	}
+
+	async getUserById(userId: string) {
+		return await this.userModel.findById(userId);
+	}
 }
