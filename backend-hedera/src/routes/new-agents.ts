@@ -7,8 +7,12 @@ import {
   AgentBuilder,
   AIAgentCapability,
   Logger,
+  FeeConfigBuilder,
+  NetworkType,
+  InboundTopicType,
 } from "@hashgraphonline/standards-sdk";
 import AgentStateManager from "../hedera-agents/agent-state.manager";
+import { HEDERA_OPERATOR_ID } from "src/env";
 
 const router = express.Router();
 
@@ -110,7 +114,7 @@ async function createBasicAgent(
       .setNetwork("testnet") // Must match client network
       .setCapabilities([
         AIAgentCapability.TEXT_GENERATION,
-        AIAgentCapability.KNOWLEDGE_RETRIEVAL
+        AIAgentCapability.KNOWLEDGE_RETRIEVAL,
       ])
       .setMetadata(metadata);
 
@@ -121,7 +125,7 @@ async function createBasicAgent(
       },
     });
 
-    console.log("result", result)
+    console.log("result", result);
 
     if (result.success) {
       logger.info(`Agent created with ID: ${result.metadata?.accountId}`);
@@ -151,8 +155,87 @@ async function createBasicAgent(
       return { success: false, error: result.error };
     }
   } catch (error: any) {
-    console.log("error000000", error)
+    console.log("error000000", error);
     logger.error("Failed to create agent:", error);
+    return { success: false, error: error.message };
+  }
+}
+
+async function createFeeBasedAgent(
+  client: HCS10Client,
+  feeAmountHbar: number = 5,
+  name: string,
+  bio: string,
+): Promise<any> {
+  try {
+    // Get the client's account ID to set up as fee collector
+    const operatorId = client.getClient().operatorAccountId?.toString();
+    if (!operatorId) {
+      throw new Error("No operator account ID available");
+    }
+
+    logger.info(
+      `Creating fee-based agent with ${feeAmountHbar} HBAR connection fee`
+    );
+
+    // Create fee configuration
+
+    // Configure the agent with fee-based inbound topic
+    const agentBuilder = new AgentBuilder()
+      .setName(name)
+      .setBio(bio)
+      .setType("autonomous")
+      .setNetwork("testnet")
+      .setModel("gpt-4")
+      .setInboundTopicType(InboundTopicType.FEE_BASED)
+      .setFeeConfig(
+        FeeConfigBuilder.forHbar(
+          feeAmountHbar,
+          HEDERA_OPERATOR_ID,
+          "testnet",
+          new Logger()
+        )
+      ); // Apply the fee configuration
+
+    // Create and register the agent
+    const result = await client.createAndRegisterAgent(agentBuilder);
+
+    if (result.success) {
+      logger.info(
+        `Fee-based agent created with ID: ${result.metadata?.accountId}`
+      );
+      logger.info(
+        `Inbound Topic (fee-based): ${result.metadata?.inboundTopicId}`
+      );
+
+      logger.info(`Agent created with ID: ${result.metadata?.accountId}`);
+
+      // Store credentials and agent info
+      const agentData = {
+        accountId: result.metadata?.accountId,
+        privateKey: result.metadata?.privateKey,
+        inboundTopicId: result.metadata?.inboundTopicId,
+        outboundTopicId: result.metadata?.outboundTopicId,
+        profileTopicId: result.metadata?.profileTopicId,
+        network: "testnet",
+        created: new Date(),
+        name,
+        description: bio,
+        metadata: result?.metadata,
+      };
+
+      // Save the agent data
+      if (result.metadata?.accountId) {
+        await stateManager.saveAgentState(result.metadata.accountId, agentData);
+      }
+
+      return result;
+    } else {
+      logger.error(`Failed to create fee-based agent: ${result.error}`);
+      return { success: false, error: result.error };
+    }
+  } catch (error) {
+    logger.error("Failed to create fee-based agent:", error);
     return { success: false, error: error.message };
   }
 }
@@ -272,6 +355,46 @@ router.post("/create", async (req: Request, res: Response) => {
   }
 });
 
+// Create a new agent
+router.post("/create/fee-based", async (req: Request, res: Response) => {
+  try {
+    const {
+      name,
+      description,
+      fee,
+      metadata = {},
+    } = req.body;
+
+    // Validate required fields
+    if (!name || !description) {
+      res.status(400).json({
+        success: false,
+        error: "Name and description are required",
+      });
+    }
+
+    const client = await createClient();
+    const result = await createFeeBasedAgent(client, fee, name, description);
+
+    if (result.success) {
+      // Return public details only
+      const agentDetails = {
+        id: result.metadata?.accountId,
+        inboundTopicId: result.metadata?.inboundTopicId,
+        outboundTopicId: result.metadata?.outboundTopicId,
+        profileTopicId: result.metadata?.profileTopicId,
+      };
+
+      res.status(201).json({ success: true, agent: agentDetails });
+    } else {
+      res.status(400).json({ success: false, error: result.error });
+    }
+  } catch (error: any) {
+    logger.error("Error creating agent:", error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 // Add profile image to an agent
 router.post(
   "/update-profile/:agentId/profile-image",
@@ -330,83 +453,83 @@ router.post(
 );
 
 // Update agent profile
-router.put("/update-agent-profile/:agentId", async (req: Request, res: Response) => {
-  try {
-    const { agentId } = req.params;
-    const { name, description, capabilities = [], metadata = {} } = req.body;
-
-    // Validate required fields
-    if (!name || !description) {
-      res.status(400).json({
-        success: false,
-        error: "Name and description are required",
-      });
-    }
-
-    const agentState = await stateManager.loadAgentState(agentId);
-    if (!agentState) {
-      res.status(404).json({ success: false, error: "Agent not found" });
-    }
-
-    const client = await createClient(agentId);
-
-    const result = await client.storeHCS11Profile(
-      name,
-      description,
-      agentState.inboundTopicId,
-      agentState.outboundTopicId,
-      capabilities,
-      metadata,
-      undefined, // No new image
-      undefined, // No new filename
-      agentState.pfpTopicId // Existing profile image topic
-    );
-
-    if (result.success) {
-      // Update agent data in database
-      agentState.name = name;
-      agentState.description = description;
-      agentState.metadata = metadata;
-
-      // Update the profileTopicId if it changed
-      if (result.profileTopicId !== agentState.profileTopicId) {
-        agentState.profileTopicId = result.profileTopicId;
-      }
-
-      await stateManager.saveAgentState(agentId, agentState);
-
-      res.json({ success: true, pfpTopicId: result.pfpTopicId });
-    }
-  } catch (err) {}
-});
-
-// Get all conversations for an agent
-router.get(
-  "/conversationa/all/:agentId",
-  (req: Request, res: Response) => {
+router.put(
+  "/update-agent-profile/:agentId",
+  async (req: Request, res: Response) => {
     try {
       const { agentId } = req.params;
+      const { name, description, capabilities = [], metadata = {} } = req.body;
 
-      const agentState = stateManager.loadAgentState(agentId);
+      // Validate required fields
+      if (!name || !description) {
+        res.status(400).json({
+          success: false,
+          error: "Name and description are required",
+        });
+      }
+
+      const agentState = await stateManager.loadAgentState(agentId);
       if (!agentState) {
         res.status(404).json({ success: false, error: "Agent not found" });
       }
 
-      const conversations = stateManager.listConversations(agentId);
+      const client = await createClient(agentId);
 
-      res.json({
-        success: true,
-        conversations: conversations,
-      });
-    } catch (error: any) {
-      logger.error(
-        `Error listing conversations for agent ${req.params.agentId}:`,
-        error
+      const result = await client.storeHCS11Profile(
+        name,
+        description,
+        agentState.inboundTopicId,
+        agentState.outboundTopicId,
+        capabilities,
+        metadata,
+        undefined, // No new image
+        undefined, // No new filename
+        agentState.pfpTopicId // Existing profile image topic
       );
-      res.status(500).json({ success: false, error: error.message });
-    }
+
+      if (result.success) {
+        // Update agent data in database
+        agentState.name = name;
+        agentState.description = description;
+        agentState.metadata = metadata;
+
+        // Update the profileTopicId if it changed
+        if (result.profileTopicId !== agentState.profileTopicId) {
+          agentState.profileTopicId = result.profileTopicId;
+        }
+
+        await stateManager.saveAgentState(agentId, agentState);
+
+        res.json({ success: true, pfpTopicId: result.pfpTopicId });
+      }
+    } catch (err) {}
   }
 );
+
+// Get all conversations for an agent
+router.get("/conversationa/all/:agentId", (req: Request, res: Response) => {
+  try {
+    const { agentId } = req.params;
+
+    const agentState = stateManager.loadAgentState(agentId);
+    if (!agentState) {
+      res.status(404).json({ success: false, error: "Agent not found" });
+    }
+
+    const conversations = stateManager.listConversations(agentId);
+
+    res.json({
+      success: true,
+      conversations: conversations,
+    });
+  } catch (error: any) {
+    logger.error(
+      `Error listing conversations for agent ${req.params.agentId}:`,
+      error
+    );
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
 
 // Get a specific conversation
 router.get(

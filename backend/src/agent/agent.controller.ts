@@ -33,6 +33,17 @@ export class AgentController {
 		}
 	}
 
+	@Get("get/my/:ownerId")
+	async getAgentsByOwner(@Param("ownerId") ownerId: string, @Res() res: AppReply) {
+		try {
+			const data = await this.agentService.getAgentsByOwner(ownerId);
+
+			return res.status(HttpStatus.OK).json({ status: "success", data });
+		} catch (err) {
+			throw new CustomBadRequestException();
+		}
+	}
+
 	@Get("profile/status/:elizaId")
 	async getElizaAgentStatus(@Param("elizaId") elizaId: string, @Res() res: AppReply) {
 		try {
@@ -81,6 +92,18 @@ export class AgentController {
 	async updateCreditsForUser(@Body() body: UpdateCreditsDTO, @Res() res: AppReply) {
 		try {
 			const data = await this.agentService.updateCreditsForUser(body);
+
+			return res.status(HttpStatus.OK).json({ status: "success", data });
+		} catch (err) {
+			console.log("error", err)
+			throw new CustomBadRequestException();
+		}
+	}
+
+	@Get("credits/get/:accountId/:agentId")
+	async getCreditsByAccountAndAgent(@Param("accountId") accountId: string, @Param("agentId") agentId: string, @Res() res: AppReply) {
+		try {
+			const data = await this.agentService.getCreditsByAccountAndAgent(accountId, agentId);
 
 			return res.status(HttpStatus.OK).json({ status: "success", data });
 		} catch (err) {

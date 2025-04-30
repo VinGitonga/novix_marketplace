@@ -13,6 +13,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { io, Socket } from "socket.io-client";
 import { cn } from "@/lib/utils";
 import { useChatStore } from "@/hooks/store/useChatStore";
+import useSWR from "swr";
+import { IApiEndpoint } from "@/types/Api";
+import { swrFetcher } from "@/lib/api-client";
+import { IAgent } from "@/types/Agent";
 
 interface Agent {
 	name: string;
@@ -21,6 +25,8 @@ interface Agent {
 	accuracy: string;
 	backgroundImage: string;
 }
+
+const images = ["/images/bg/card-bg-1.png", "/images/bg/card-bg-2.png", "/images/bg/card-bg-4.png", "/images/bg/card-bg-5.png", "/images/bg/card-bg-6.png"];
 
 const agents: Agent[] = [
 	{
@@ -86,6 +92,8 @@ const HomeScreen = () => {
 	const { input: textInput, setInput: setTextInput } = useChatStore();
 
 	const navigate = useNavigate();
+
+	const { data: agentsData, isLoading } = useSWR<IAgent[]>([IApiEndpoint.AGENTS_GET_ALL], swrFetcher, { keepPreviousData: true });
 
 	// Auto-scroll to bottom when messages change
 	useEffect(() => {
@@ -271,11 +279,12 @@ const HomeScreen = () => {
 						</div>
 					</div>
 					<div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-x-7 gap-y-10 px-2 md:px-20">
-						{agents.map((agent, index) => (
-							<Link key={index} to={"/public/agent-details"}>
-								<AgentDetailsCard agentData={agent} />
-							</Link>
-						))}
+						{agentsData &&
+							agentsData.map((agent, index) => (
+								<Link key={index} to={`/public/agent-details/${agent?._id}`}>
+									<AgentDetailsCard agentData={agent} />
+								</Link>
+							))}
 					</div>
 				</div>
 				<div className="px-2 md:px-20 mt-20 w-full py-10">
@@ -446,17 +455,22 @@ const HomeScreen = () => {
 	);
 };
 
-const AgentDetailsCard: FC<{ agentData: Agent }> = ({ agentData }) => {
+const AgentDetailsCard: FC<{ agentData: IAgent }> = ({ agentData }) => {
+	// Randomly select an image from the images array
+	const randomImage = images[Math.floor(Math.random() * images.length)];
+
+	console.log("agentData", agentData);
+
 	return (
-		<div style={{ backgroundImage: `url(${agentData.backgroundImage})` }} className="w-full bg-cover bg-center px-4 py-5 rounded-lg shadow-lg">
+		<div style={{ backgroundImage: `url(${randomImage})` }} className="w-full bg-cover bg-center px-4 py-5 rounded-lg shadow-lg min-h-48 h-full">
 			<div className="space-y-8">
 				<h2 className="font-inter text-lg font-bold">{agentData.name}</h2>
-				<p className="font-inter">{agentData.description}</p>
+				<p className="font-inter">{agentData.summary}</p>
 				<div className="flex items-center gap-2">
 					<button className="bg-transparent border border-white/20 text-white px-4 py-2 rounded-lg font-semibold shadow font-inter cursor-pointer hover:shadow-lg transition duration-200 ease-in-out flex items-center hover:bg-white/20">
-						{agentData.price}
+						{agentData.pricingModel ?? "Free Trial"}
 					</button>
-					<p className="font-inter text-sm text-white/50">{agentData.accuracy}</p>
+					{/* <p className="font-inter text-sm text-white/50">{agentData.accuracy}</p> */}
 				</div>
 			</div>
 		</div>

@@ -16,6 +16,7 @@ import useAgentsUtils from "@/hooks/useAgentsUtils";
 import { useState } from "react";
 import { toast } from "sonner";
 import UpdateAgentDialog from "@/components/modals/UpdateAgentDialog";
+import { useAuthStore } from "@/hooks/store/useAuthStore";
 
 interface AgentItem {
 	name: string;
@@ -26,10 +27,12 @@ interface AgentItem {
 
 interface AgentItemProps {
 	item: IAgent;
+	refresh?: VoidFunction;
 }
 
 const MyAgents = () => {
-	const { data: loadedAgents, isLoading } = useSWR<IAgent[]>([IApiEndpoint.AGENTS_GET_ALL], swrFetcher, { keepPreviousData: true });
+	const { account } = useAuthStore();
+	const { data: loadedAgents, isLoading, mutate } = useSWR<IAgent[]>(!account ? undefined : [`${IApiEndpoint.AGENTS_GET_MY_AGENTS}/${account?._id}`], swrFetcher, { keepPreviousData: true });
 	return (
 		<>
 			<title>My Agents - Novix</title>
@@ -42,7 +45,7 @@ const MyAgents = () => {
 				{loadedAgents && loadedAgents?.length > 0 && (
 					<TooltipProvider>
 						{loadedAgents.map((item, idx) => (
-							<AgentItem item={item} key={idx} />
+							<AgentItem item={item} key={idx} refresh={mutate} />
 						))}
 					</TooltipProvider>
 				)}
@@ -51,7 +54,7 @@ const MyAgents = () => {
 	);
 };
 
-const AgentItem = ({ item }: AgentItemProps) => {
+const AgentItem = ({ item, refresh }: AgentItemProps) => {
 	const [isStarting, setIsStarting] = useState<boolean>(false);
 	const { startElizaAgent } = useAgentsUtils();
 	const navigate = useNavigate();
@@ -104,7 +107,7 @@ const AgentItem = ({ item }: AgentItemProps) => {
 				</Button>
 				<Tooltip>
 					<TooltipTrigger>
-						<UpdateAgentDialog agentData={item} />
+						<UpdateAgentDialog agentData={item} mutate={refresh} />
 					</TooltipTrigger>
 					<TooltipContent>
 						<p>Configure</p>

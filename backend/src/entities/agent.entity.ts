@@ -45,6 +45,9 @@ export class Agent {
 
 	@Prop({})
 	pricingModel: string;
+
+	@Prop({ type: mongoose.Schema.Types.ObjectId, ref: "User" })
+	buyerId: User;
 }
 
 export const AgentSchema = SchemaFactory.createForClass(Agent);

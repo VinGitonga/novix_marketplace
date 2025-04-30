@@ -12,4 +12,8 @@ export interface IAgent {
 	bio: string[];
 	topics: string[];
 	worldId?: string;
+	owner?: string
+	price?: number;
+	credits?: number;
+	pricingModel?: string;
 }

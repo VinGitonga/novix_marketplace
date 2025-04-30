@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ELIZA_BACKEND_API_URL, ELIZA_BASE_URL } from "@/env";
 import { useAuthStore } from "@/hooks/store/useAuthStore";
+import useAgentsUtils from "@/hooks/useAgentsUtils";
 import { swrFetcher } from "@/lib/api-client";
 import { cn } from "@/lib/utils";
 import { IAgent } from "@/types/Agent";
@@ -112,10 +113,14 @@ const Playground = () => {
 	const [messages, setMessages] = useState<{ createdAt: number; text: string; source: string }[]>([]);
 
 	const { account } = useAuthStore();
+	const { updateCreditsForUser } = useAgentsUtils();
 	const [loading, setLoading] = useState<boolean>(false);
 
 	const { data: agentDetails, isLoading } = useSWR<IAgent>(!params.agentId ? undefined : [`${IApiEndpoint.AGENTS_GET_DETAILS}/${params.agentId}`], swrFetcher, { keepPreviousData: true });
 	const { data: status, mutate } = useSWR(!agentDetails ? undefined : [`${IApiEndpoint.AGENTS_GET_ELIZA_STATUS}/${agentDetails.elizaId}`], swrFetcher, { keepPreviousData: true });
+	const { data: creditsData, mutate: mutateCredits } = useSWR<{ _id: string; count: number }>(!account ? null : [`${IApiEndpoint.AGENTS_GET_AGENT_CREDITS}/${account?.accountId}/${agentDetails?._id}`], swrFetcher, {
+		keepPreviousData: true,
+	});
 
 	const sendMsg = async () => {
 		if (!input.trim() || input.length > maxCharacters) {
@@ -150,12 +155,20 @@ const Playground = () => {
 						source: "client_chat:agent",
 					},
 				]);
+				updateCredits();
 			}
 		} catch (err) {
 			console.error(err);
 		} finally {
 			setLoading(false);
 		}
+	};
+
+	const updateCredits = async () => {
+		try {
+			await updateCreditsForUser(account?.accountId!, agentDetails?._id!, agentDetails?.owner!);
+			mutateCredits();
+		} catch (err) {}
 	};
 
 	const getMemories = async () => {
@@ -246,6 +259,7 @@ const Playground = () => {
 							<span>Finance</span>
 						</div>
 					</div>
+					<p className="text-center">Credits: {creditsData && creditsData?.count}</p>
 				</div>
 			</div>
 			{(isLoading || !agentDetails) && (

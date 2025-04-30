@@ -161,7 +161,7 @@ export class AgentService {
 		const count = agentDetails.credits;
 
 		const newCreditsData = {
-			count: count - 1,
+			count: count ? count - 1 : 100 - 1,
 			accountId: accountId,
 			agentId,
 		};
@@ -169,6 +169,14 @@ export class AgentService {
 		const newCredits = (await this.creditsModel.create(newCreditsData)).save();
 
 		return newCredits;
+	}
+
+	async getAgentsByOwner(ownerId: string) {
+		return await this.agentModel.find({ $or: [{ owner: ownerId }, { buyerId: ownerId }] });
+	}
+
+	async getCreditsByAccountAndAgent(accountId: string, agentId: string) {
+		return await this.creditsModel.findOne({ accountId, agentId });
 	}
 
 	private async getMostRecentAgentByName(name: string) {

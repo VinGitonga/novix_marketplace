@@ -23,7 +23,9 @@ export const enum IApiEndpoint {
 	ACCOUNT_CREATE = "users/create",
 	ACCOUNT_GET_PROFILE = "users/profile",
 	AGENTS_CREDITS_UPDATE = "agents/credits/update",
-	AGENTS_UPDATE_PRICING = "agents/update/pricing"
+	AGENTS_UPDATE_PRICING = "agents/update/pricing",
+	AGENTS_GET_MY_AGENTS = "agents/get/my",
+	AGENTS_GET_AGENT_CREDITS = "agents/credits/get",
 }
 
 export interface IMethodParams {

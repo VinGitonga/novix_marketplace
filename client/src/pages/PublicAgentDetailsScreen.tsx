@@ -1,8 +1,30 @@
 import { Button } from "@/components/ui/button";
+import { swrFetcher } from "@/lib/api-client";
+import { useWallet } from "@/providers/HashinalWalletProvider";
+import { IAgent } from "@/types/Agent";
+import { IApiEndpoint } from "@/types/Api";
 import { ArrowRightIcon } from "lucide-react";
 import { Img } from "react-image";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "sonner";
+import useSWR from "swr";
+import BuyDialog from "./BuyDialog";
 
 const PublicAgentDetailsScreen = () => {
+	const params = useParams();
+	const { accountId } = useWallet();
+	const navigate = useNavigate();
+	const { data: agentDetails, isLoading } = useSWR<IAgent>(!params.agentId ? undefined : [`${IApiEndpoint.AGENTS_GET_DETAILS}/${params.agentId}`], swrFetcher, { keepPreviousData: true });
+
+	const onClickTry = () => {
+		if (!accountId) {
+			toast.warning("Kindly connect your Hedera Wallet");
+			return;
+		}
+
+		navigate(`/app/agents/playground/${agentDetails?._id}`);
+	};
+
 	return (
 		<div className="mt-10 text-white w-full font-inter">
 			<title>Agent Details - Novix</title>
@@ -17,19 +39,19 @@ const PublicAgentDetailsScreen = () => {
 			</div>
 			<div className="*:w-full md:w-3/5 mx-auto mb-10">
 				<div className="space-y-4 w-full">
-					<h1 className="text-center font-bold font-inter text-4xl mb-10">Empower Your Financial Research with AI</h1>
-					<p className="font-inter text-center text-white/80">Unlock deeper insights, streamline analysis, and make data-driven decisions faster with our cutting-edge AI-powered research assistant.</p>
+					<h1 className="text-center font-bold font-inter text-4xl mb-10">Get Empowered By AI</h1>
+					<p className="font-inter text-center text-white/80">{agentDetails?.summary}</p>
 				</div>
 			</div>
 			<div className="flex items-center justify-center gap-4">
-				<Button className="bg-gradient-to-r from-[#FFFFFF]/25 to-[#0A0248] text-white px-4 py-2 rounded-lg font-semibold shadow font-inter cursor-pointer hover:shadow-lg transition duration-200 ease-in-out flex items-center hover:bg-white/20">
-					Buy the Agent
-				</Button>
-				<Button className="bg-gradient-to-r from-[#FFFFFF]/25 to-[#030114] text-white px-4 py-2 rounded-lg font-semibold shadow font-inter cursor-pointer hover:shadow-lg transition duration-200 ease-in-out flex items-center hover:bg-white/20">
+				{agentDetails?.price && (
+					<BuyDialog agentData={agentDetails} />
+				)}
+				<Button onClick={onClickTry} className="bg-gradient-to-r from-[#FFFFFF]/25 to-[#030114] text-white px-4 py-2 rounded-lg font-semibold shadow font-inter cursor-pointer hover:shadow-lg transition duration-200 ease-in-out flex items-center hover:bg-white/20">
 					Try it for Free
 				</Button>
 			</div>
-			<div className="mt-28">
+			<div className="mt-28 *:w-full md:w-3/5 mx-auto mb-10">
 				<div className="mb-5">
 					<div className="flex items-center justify-center">
 						<div className="bg-gray-800 shadow-md px-2 py-1 rounded-2xl text-sm flex items-center gap-2">
@@ -39,8 +61,8 @@ const PublicAgentDetailsScreen = () => {
 					</div>
 				</div>
 				<div className="space-y-4">
-					<h1 className="text-center font-bold font-inter text-2xl">Smarter Financial Research with AI</h1>
-					<p className="font-inter text-center text-white/80">Analyze data faster, uncover insights, and make informed decisions with AI-driven research.</p>
+					<h1 className="text-center font-bold font-inter text-2xl">{agentDetails?.name}</h1>
+					<p className="font-inter text-center text-white/80">{agentDetails?.description}</p>
 				</div>
 			</div>
 			<div className="mt-10 *:w-full md:w-4/5 mx-auto mb-10">

@@ -20,7 +20,7 @@ const router = createBrowserRouter([
 		element: <HomeAltLayout />,
 		children: [
 			{
-				path: "agent-details",
+				path: "agent-details/:agentId",
 				element: <PublicAgentDetailsScreen />,
 			},
 		],

@@ -400,6 +400,7 @@ import express from "express";
 import { APP_PORT } from "./env";
 import { logger } from "./logger/winston";
 import agentRoutes from "./routes/agent";
+import newAgentsRoutes from "./routes/new-agents";
 import { agentExecutor, initializeAgent } from "./agent";
 import http from "http";
 import { Server, Socket } from "socket.io";
@@ -415,6 +416,7 @@ app.get("/", (req: express.Request, res: express.Response) => {
 });
 
 app.use("/api/agent", agentRoutes);
+app.use("/api/new-agents", newAgentsRoutes);
 
 const server = http.createServer(app);
 
