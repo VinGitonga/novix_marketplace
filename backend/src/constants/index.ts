@@ -10,3 +10,4 @@ export const createAgentDefaults = {
 		post: ["Structure explanations clearly"],
 	},
 };
+export const HEDERA_BACKEND_BASE_URL = "http://localhost:7834/api"

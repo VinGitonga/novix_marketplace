@@ -13,6 +13,7 @@ import {
 } from "@hashgraphonline/standards-sdk";
 import AgentStateManager from "../hedera-agents/agent-state.manager";
 import { HEDERA_OPERATOR_ID } from "src/env";
+import Agent from "src/entities/agent";
 
 const router = express.Router();
 
@@ -81,6 +82,7 @@ async function createBasicAgent(
     model?: string;
     capabilities?: AIAgentCapability[];
     metadata?: any;
+    conversationAgentId?: string;
   }
 ): Promise<any> {
   try {
@@ -103,6 +105,7 @@ async function createBasicAgent(
           supportedLanguages: ["en"],
         },
       },
+      conversationAgentId,
     } = agentInfo;
 
     // Configure the agent
@@ -142,6 +145,7 @@ async function createBasicAgent(
         name,
         description,
         metadata,
+        conversationAgentId,
       };
 
       // Save the agent data
@@ -165,7 +169,7 @@ async function createFeeBasedAgent(
   client: HCS10Client,
   feeAmountHbar: number = 5,
   name: string,
-  bio: string,
+  bio: string
 ): Promise<any> {
   try {
     // Get the client's account ID to set up as fee collector
@@ -316,6 +320,7 @@ router.post("/create", async (req: Request, res: Response) => {
         AIAgentCapability.KNOWLEDGE_RETRIEVAL,
       ],
       metadata = {},
+      conversationAgentId,
     } = req.body;
 
     // Validate required fields
@@ -334,6 +339,7 @@ router.post("/create", async (req: Request, res: Response) => {
       model,
       capabilities,
       metadata,
+      conversationAgentId
     });
 
     if (result.success) {
@@ -358,12 +364,7 @@ router.post("/create", async (req: Request, res: Response) => {
 // Create a new agent
 router.post("/create/fee-based", async (req: Request, res: Response) => {
   try {
-    const {
-      name,
-      description,
-      fee,
-      metadata = {},
-    } = req.body;
+    const { name, description, fee, metadata = {} } = req.body;
 
     // Validate required fields
     if (!name || !description) {
@@ -597,6 +598,25 @@ router.post(
       );
       res.status(500).json({ success: false, error: error.message });
     }
+  }
+);
+
+router.get(
+  "/get-agent/profile/:conversationAgentId",
+  async (req: express.Request, res: express.Response) => {
+    const conversationAgentId = req.params.conversationAgentId;
+
+    const agentData = await Agent.findOne({
+      conversationAgentId: conversationAgentId,
+    });
+
+    res
+      .status(200)
+      .json({
+        success: true,
+        message: "Agent Data Retrieved Successfully",
+        data: agentData,
+      });
   }
 );
 

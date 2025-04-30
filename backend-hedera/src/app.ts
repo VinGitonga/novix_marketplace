@@ -401,6 +401,7 @@ import { APP_PORT } from "./env";
 import { logger } from "./logger/winston";
 import agentRoutes from "./routes/agent";
 import newAgentsRoutes from "./routes/new-agents";
+import hcsTopicRoutes from "./routes/hcs-topics";
 import { agentExecutor, initializeAgent } from "./agent";
 import http from "http";
 import { Server, Socket } from "socket.io";
@@ -417,6 +418,8 @@ app.get("/", (req: express.Request, res: express.Response) => {
 
 app.use("/api/agent", agentRoutes);
 app.use("/api/new-agents", newAgentsRoutes);
+app.use("/api/hcs-topics", hcsTopicRoutes);
+
 
 const server = http.createServer(app);
 

@@ -4,13 +4,14 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { Agent } from "src/entities/agent.entity";
 import { CreateAgentDto } from "./dto/create-agent.dto";
-import { createAgentDefaults, ELIZA_BASE_URL } from "src/constants";
+import { createAgentDefaults, ELIZA_BASE_URL, HEDERA_BACKEND_BASE_URL } from "src/constants";
 import { firstValueFrom } from "rxjs";
 import { UpdatePricingDTO } from "./dto/update-pricing.dto";
 import { Credits } from "src/entities/credits.entity";
 import { UpdateCreditsDTO } from "./dto/update-credits.dto";
 import { User } from "src/entities/user.entity";
 import { UsersService } from "src/users/users.service";
+import { AxiosRequestConfig } from "axios";
 
 @Injectable()
 export class AgentService {
@@ -124,7 +125,86 @@ export class AgentService {
 
 		const updatedAgentData = await this.agentModel.findByIdAndUpdate(agentId, { $set: { ...data } }, { new: true });
 
+		// we check if we've agent data in hedera, otherwise we create it
+		this.setupHederaAgentItem(agentId);
+
 		return updatedAgentData;
+	}
+
+	private async setupHederaAgentItem(agentId: string) {
+		try {
+			let config = {
+				method: "get",
+				url: `${HEDERA_BACKEND_BASE_URL}/new-agents/get-agent/profile/${agentId}`,
+				headers: {
+					"Content-Type": "application/json",
+				},
+			};
+			const hederaAgentObsResp = this.httpService.request<{ success: boolean; data: any }>(config);
+
+			const resp = await firstValueFrom(hederaAgentObsResp);
+			let agentData: any = null;
+
+			if (resp?.data?.success) {
+				agentData = resp?.data?.data;
+			}
+
+			if (agentData) {
+				// we know it exists, we update metadata
+				await this.agentModel.findByIdAndUpdate(agentId, { $set: { hederaAgentMetadata: agentData } });
+			} else {
+				const agentInfo = await this.agentModel.findById(agentId).populate("owner");
+				// we create an agent
+				const body = {
+					name: agentInfo.name,
+					description: agentInfo.description,
+					agentType: "autonomous",
+					capabilities: [0, 1],
+					metadata: {
+						creator: agentInfo?.owner?.name ?? "Novix AI",
+						version: "1.0",
+						properties: {
+							specialization: agentInfo?.summary,
+							supportedLanguages: ["en"],
+						},
+					},
+				};
+
+				const createConfig = {
+					method: "post",
+					maxBodyLength: Infinity,
+					url: `${HEDERA_BACKEND_BASE_URL}/new-agents/create`,
+					headers: {
+						Accept: "application/json",
+					},
+					data: body,
+				} satisfies AxiosRequestConfig;
+
+				const createAgentObsResp = this.httpService.request<{ success: boolean; agent: { id: string; inboundTopicId: string; outboundTopicId: string; profileTopicId: string } }>(createConfig);
+
+				const createData = await firstValueFrom(createAgentObsResp);
+
+				if (createData?.data?.success) {
+					//
+					// get the newly created account;
+					const newHederaAgentObs = this.httpService.request<{ success: boolean; data: any }>(config);
+
+					const createRespInfo = await firstValueFrom(newHederaAgentObs);
+					let agentData: any = null;
+
+					if (createRespInfo?.data?.success) {
+						agentData = createRespInfo?.data?.data;
+					}
+
+					if (agentData) {
+						// we know it exists, we update metadata
+						await this.agentModel.findByIdAndUpdate(agentId, { $set: { hederaAgentMetadata: agentData } });
+					}
+				}
+			}
+		} catch (err) {
+			console.log("error", err);
+		}
 	}
 
 	async updateCreditsForUser(body: UpdateCreditsDTO) {

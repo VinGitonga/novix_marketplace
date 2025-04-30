@@ -12,6 +12,7 @@ const AgentSchema = new Schema({
   name: { type: String, required: true },
   description: { type: String, required: true },
   metadata: { type: Object, default: {} },
+  conversationAgentId: { type: String },
 });
 
 const Agent = model("AgentData", AgentSchema);

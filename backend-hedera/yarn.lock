@@ -673,7 +673,7 @@
     long "^5.2.3"
     protobufjs "7.2.5"
 
-"@hashgraph/sdk@2.63.0", "@hashgraph/sdk@^2.55.1", "@hashgraph/sdk@^2.62.0", "@hashgraph/sdk@^2.63.0":
+"@hashgraph/sdk@2.63.0", "@hashgraph/sdk@^2.55.1", "@hashgraph/sdk@^2.56.0", "@hashgraph/sdk@^2.62.0", "@hashgraph/sdk@^2.63.0":
   version "2.63.0"
   resolved "https://registry.yarnpkg.com/@hashgraph/sdk/-/sdk-2.63.0.tgz#c88ac22d7f79e48f1dae621857afcedba7895747"
   integrity sha512-OS/wbsxvX1H0nCMS/Z8JYRcOlsUSV7q2AcoALnZaMTWAmq9cyrr1MRFpEVSFZ2DNSDf4mBGjOoWvYT9LLCtjFQ==
@@ -1085,6 +1085,24 @@
     zod "^3.22.3"
     zod-to-json-schema "^3.22.5"
 
+"@langchain/core@^0.3.26":
+  version "0.3.50"
+  resolved "https://registry.yarnpkg.com/@langchain/core/-/core-0.3.50.tgz#e9444b5419a72a60ef44d65bff659e2ba243ff3b"
+  integrity sha512-0MBVe7dZ4h3a3MJAg/YesWBvwkDg8t2rDIGg2Q11DxRBnxB7OqmvBlbZ1ftaDvoBZzxMY+8E58OsCLuay3Bk9w==
+  dependencies:
+    "@cfworker/json-schema" "^4.0.2"
+    ansi-styles "^5.0.0"
+    camelcase "6"
+    decamelize "1.2.0"
+    js-tiktoken "^1.0.12"
+    langsmith "^0.3.16"
+    mustache "^4.2.0"
+    p-queue "^6.6.2"
+    p-retry "4"
+    uuid "^10.0.0"
+    zod "^3.22.4"
+    zod-to-json-schema "^3.22.3"
+
 "@langchain/core@^0.3.46", "@langchain/core@^0.3.49":
   version "0.3.49"
   resolved "https://registry.yarnpkg.com/@langchain/core/-/core-0.3.49.tgz#abccfc6c20d237536a90f1379f682177bb02e5ee"
@@ -1103,6 +1121,33 @@
     zod "^3.22.4"
     zod-to-json-schema "^3.22.3"
 
+"@langchain/langgraph-checkpoint@~0.0.17":
+  version "0.0.17"
+  resolved "https://registry.yarnpkg.com/@langchain/langgraph-checkpoint/-/langgraph-checkpoint-0.0.17.tgz#d0a8824eb0769567da54262adebe65db4ee6d58f"
+  integrity sha512-6b3CuVVYx+7x0uWLG+7YXz9j2iBa+tn2AXvkLxzEvaAsLE6Sij++8PPbS2BZzC+S/FPJdWsz6I5bsrqL0BYrCA==
+  dependencies:
+    uuid "^10.0.0"
+
+"@langchain/langgraph-sdk@~0.0.32":
+  version "0.0.71"
+  resolved "https://registry.yarnpkg.com/@langchain/langgraph-sdk/-/langgraph-sdk-0.0.71.tgz#0e5c442ff98c415ba5510ac8fd067feb73ef94c0"
+  integrity sha512-mvtlNLnW2nNJeyTG0vJIU2Bm485+QMbeXzHd4/h5bKzF5lDBzoW1s3P/v0uRVyMTFKmtarByjeeBJDPgy6f7gw==
+  dependencies:
+    "@types/json-schema" "^7.0.15"
+    p-queue "^6.6.2"
+    p-retry "4"
+    uuid "^9.0.0"
+
+"@langchain/langgraph@^0.2.34":
+  version "0.2.67"
+  resolved "https://registry.yarnpkg.com/@langchain/langgraph/-/langgraph-0.2.67.tgz#f154e4e8534ca78b2b73a2cd3a901d82790b0d1b"
+  integrity sha512-tu/ewNIvhIPzeW5GxGzqjmGHinnU/qbNAoLM9czdpci0PCbMysbEJ2pbJrZs7ZjaReWSnr/THkeLPQwqGOM9xw==
+  dependencies:
+    "@langchain/langgraph-checkpoint" "~0.0.17"
+    "@langchain/langgraph-sdk" "~0.0.32"
+    uuid "^10.0.0"
+    zod "^3.23.8"
+
 "@langchain/openai@>=0.1.0 <0.6.0", "@langchain/openai@>=0.2.0 <0.6.0", "@langchain/openai@^0.5.6", "@langchain/openai@^0.5.7":
   version "0.5.7"
   resolved "https://registry.yarnpkg.com/@langchain/openai/-/openai-0.5.7.tgz#a502319774eef33c6645d8ccc24da261796cb4fa"
@@ -1110,6 +1155,16 @@
   dependencies:
     js-tiktoken "^1.0.12"
     openai "^4.93.0"
+    zod "^3.22.4"
+    zod-to-json-schema "^3.22.3"
+
+"@langchain/openai@^0.3.16":
+  version "0.3.17"
+  resolved "https://registry.yarnpkg.com/@langchain/openai/-/openai-0.3.17.tgz#5b8613ac8d849da90f3ecd8368ae7389fca4ee13"
+  integrity sha512-uw4po32OKptVjq+CYHrumgbfh4NuD7LqyE+ZgqY9I/LrLc6bHLMc+sisHmI17vgek0K/yqtarI0alPJbzrwyag==
+  dependencies:
+    js-tiktoken "^1.0.12"
+    openai "^4.77.0"
     zod "^3.22.4"
     zod-to-json-schema "^3.22.3"
 
@@ -1910,6 +1965,11 @@
     "@types/tough-cookie" "*"
     parse5 "^7.0.0"
 
+"@types/json-schema@^7.0.15":
+  version "7.0.15"
+  resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.15.tgz#596a1747233694d50f6ad8a7869fcb6f56cf5841"
+  integrity sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==
+
 "@types/jsonwebtoken@^9.0.0":
   version "9.0.9"
   resolved "https://registry.yarnpkg.com/@types/jsonwebtoken/-/jsonwebtoken-9.0.9.tgz#a4c3a446c0ebaaf467a58398382616f416345fb3"
@@ -2592,7 +2652,7 @@ before-after-hook@^3.0.2:
   resolved "https://registry.yarnpkg.com/before-after-hook/-/before-after-hook-3.0.2.tgz#d5665a5fa8b62294a5aa0a499f933f4a1016195d"
   integrity sha512-Nik3Sc0ncrMK4UUdXQmAnRtzmNQTAAXmXIopizwZ1W1t8QmfJj+zL4OA2I7XPTPW5z5TDqv4hRo/JzouDJnX3A==
 
-bignumber.js@^9.1.1:
+bignumber.js@^9.1.1, bignumber.js@^9.1.2:
   version "9.3.0"
   resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-9.3.0.tgz#bdba7e2a4c1a2eba08290e8dcad4f36393c92acd"
   integrity sha512-EM7aMFTXbptt/wZdMlBv2t8IViwQL+h6SLHosp8Yf0dqJMTnY6iL32opnAB6kAdL0SZPuvcAzFr31o0c/R3/RA==
@@ -3952,6 +4012,18 @@ hasown@^2.0.2:
   integrity sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ==
   dependencies:
     function-bind "^1.1.2"
+
+hedera-agent-kit@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/hedera-agent-kit/-/hedera-agent-kit-1.0.6.tgz#e976d1cdf017e9fb52e54ef2b003aefee152ea76"
+  integrity sha512-FlPzuE+5L/gye/mhPo7WZ+vJfyrzPc9UJ2FzMEYbM2ten613jkQCmNSs42lX9w9Uu4nuUd7aO+n5tZUiDsHoZA==
+  dependencies:
+    "@hashgraph/sdk" "^2.56.0"
+    "@langchain/core" "^0.3.26"
+    "@langchain/langgraph" "^0.2.34"
+    "@langchain/openai" "^0.3.16"
+    bignumber.js "^9.1.2"
+    dotenv "^16.4.7"
 
 help-me@^5.0.0:
   version "5.0.0"
@@ -5380,6 +5452,19 @@ openai@^4.28.0, openai@^4.93.0:
   version "4.96.0"
   resolved "https://registry.yarnpkg.com/openai/-/openai-4.96.0.tgz#d1a821e99949ac2c55709f4e28e18bb1d9fd8ef9"
   integrity sha512-dKoW56i02Prv2XQolJ9Rl9Svqubqkzg3QpwEOBuSVZLk05Shelu7s+ErRTwFc1Bs3JZ2qBqBfVpXQiJhwOGG8A==
+  dependencies:
+    "@types/node" "^18.11.18"
+    "@types/node-fetch" "^2.6.4"
+    abort-controller "^3.0.0"
+    agentkeepalive "^4.2.1"
+    form-data-encoder "1.7.2"
+    formdata-node "^4.3.2"
+    node-fetch "^2.6.7"
+
+openai@^4.77.0:
+  version "4.96.2"
+  resolved "https://registry.yarnpkg.com/openai/-/openai-4.96.2.tgz#a7d360597f273a5f6ed8dd22914e598013022fa4"
+  integrity sha512-R2XnxvMsizkROr7BV3uNp1q/3skwPZ7fmPjO1bXLnfB4Tu5xKxrT1EVwzjhxn0MZKBKAvOaGWS63jTMN6KrIXA==
   dependencies:
     "@types/node" "^18.11.18"
     "@types/node-fetch" "^2.6.4"
@@ -7131,7 +7216,7 @@ zod-to-json-schema@^3.22.3, zod-to-json-schema@^3.22.5:
   resolved "https://registry.yarnpkg.com/zod-to-json-schema/-/zod-to-json-schema-3.24.5.tgz#d1095440b147fb7c2093812a53c54df8d5df50a3"
   integrity sha512-/AuWwMP+YqiPbsJx5D6TfgRTc4kTLjsh5SOcd4bLsfUg2RcEXrFMJl1DGgdHy2aCfsIA/cr/1JM0xcB2GZji8g==
 
-zod@^3.22.3, zod@^3.22.4, zod@^3.24.2:
+zod@^3.22.3, zod@^3.22.4, zod@^3.23.8, zod@^3.24.2:
   version "3.24.3"
   resolved "https://registry.yarnpkg.com/zod/-/zod-3.24.3.tgz#1f40f750a05e477396da64438e0e1c0995dafd87"
   integrity sha512-HhY1oqzWCQWuUqvBFnsyrtZRhyPeR7SUGv+C4+MsisMuVfSPx8HpwWqH8tRahSlt6M3PiFAcoeFhZAqIXTxoSg==

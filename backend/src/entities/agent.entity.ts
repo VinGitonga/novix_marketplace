@@ -48,6 +48,9 @@ export class Agent {
 
 	@Prop({ type: mongoose.Schema.Types.ObjectId, ref: "User" })
 	buyerId: User;
+
+	@Prop({ type: Object })
+	hederaAgentMetadata: Record<string, any>;
 }
 
 export const AgentSchema = SchemaFactory.createForClass(Agent);
