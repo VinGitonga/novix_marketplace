@@ -17,6 +17,8 @@ import useSWR from "swr";
 import { IApiEndpoint } from "@/types/Api";
 import { swrFetcher } from "@/lib/api-client";
 import { IAgent } from "@/types/Agent";
+import { IAssetInfo } from "@/types/Asset";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 
 interface Agent {
 	name: string;
@@ -94,6 +96,8 @@ const HomeScreen = () => {
 	const navigate = useNavigate();
 
 	const { data: agentsData, isLoading } = useSWR<IAgent[]>([IApiEndpoint.AGENTS_GET_ALL], swrFetcher, { keepPreviousData: true });
+
+	const { data: assetsData } = useSWR<IAssetInfo[]>([IApiEndpoint.ASSETS_GET_ALL], swrFetcher, { keepPreviousData: true });
 
 	// Auto-scroll to bottom when messages change
 	useEffect(() => {
@@ -287,6 +291,31 @@ const HomeScreen = () => {
 							))}
 					</div>
 				</div>
+				<div className="mt-40">
+					<div className="mb-5">
+						<div className="flex items-center justify-center">
+							<div className="bg-gray-800 shadow-md px-2 py-1 rounded-2xl text-sm flex items-center gap-2">
+								<Img src={"/images/icons/brain.png"} className="w-5 h-5" />
+								<span>Models</span>
+							</div>
+						</div>
+					</div>
+					<div className="px-20">
+						<Carousel className="w-full dark">
+							<CarouselContent className="-ml-1">
+								{assetsData?.map((item, idx) => (
+									<CarouselItem key={idx} className="pl-1 md:basis-1/2 lg:basis-1/3">
+										<div className="p-1">
+											<AssetsDetailsCard assetData={item} />
+										</div>
+									</CarouselItem>
+								))}
+							</CarouselContent>
+							<CarouselPrevious />
+							<CarouselNext />
+						</Carousel>
+					</div>
+				</div>
 				<div className="px-2 md:px-20 mt-20 w-full py-10">
 					<div className="bg-white/[4%] rounded-2xl shadow-white w-full py-10">
 						<div className="w-full space-y-5">
@@ -469,6 +498,24 @@ const AgentDetailsCard: FC<{ agentData: IAgent }> = ({ agentData }) => {
 						{agentData.pricingModel ?? "Free Trial"}
 					</button>
 					{/* <p className="font-inter text-sm text-white/50">{agentData.accuracy}</p> */}
+				</div>
+			</div>
+		</div>
+	);
+};
+
+const AssetsDetailsCard: FC<{ assetData: IAssetInfo }> = ({ assetData }) => {
+	const randomImage = images[Math.floor(Math.random() * images.length)];
+	return (
+		<div style={{ backgroundImage: `url(${randomImage})` }} className="w-full bg-cover bg-center px-4 py-5 rounded-lg shadow-lg min-h-48 h-full">
+			<div className="space-y-8">
+				<h2 className="font-inter text-lg font-bold">{assetData.metadata?.general?.name}</h2>
+				<p className="font-inter">{assetData?.metadata?.general?.description}</p>
+				<div className="flex items-center gap-2">
+					<button className="bg-transparent border border-white/20 text-white px-4 py-2 rounded-lg font-semibold shadow font-inter cursor-pointer hover:shadow-lg transition duration-200 ease-in-out flex items-center hover:bg-white/20">
+						{assetData?.metadata?.licensing?.price ?? "Free Trial"} HBAR
+					</button>
+					<p className="font-inter text-sm text-white/50">{assetData?.hcs_topic_id}</p>
 				</div>
 			</div>
 		</div>

@@ -129,6 +129,18 @@ export class AgentService {
 		return updatedAgentData;
 	}
 
+	async transferAgentOwnerShip(agentId: string, newOwnerId: string) {
+		const ownerDetails = await this.userService.getUserById(newOwnerId);
+
+		if (!ownerDetails) {
+			throw new Error("Owner not found");
+		}
+
+		const updatedResult = await this.agentModel.findByIdAndUpdate(agentId, { $set: { owner: ownerDetails._id } }, { new: true });
+
+		return updatedResult;
+	}
+
 	private async setupHederaAgentItem(agentId: string) {
 		try {
 			let config = {

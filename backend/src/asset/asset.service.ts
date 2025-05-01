@@ -19,6 +19,7 @@ interface SearchQueryInfo {
 	sortOrder?: "asc" | "desc"; // Sort direction
 	maxResults?: number; // Number of results to return (limit)
 	skip?: number; // Number of results to skip (pagination)
+	countOnly?: boolean; // New flag for count-only queries
 }
 
 @Injectable()
@@ -52,7 +53,8 @@ export class AssetService {
 	}
 
 	async searchAssetsByNLP(queryInfo: SearchQueryInfo) {
-		const { query, assetType, category, licenseType, priceMin, priceMax, creatorId, tags, sortBy = "relevance", sortOrder = "desc", maxResults = 10, skip = 0 } = queryInfo;
+		console.log("queryInfo", queryInfo);
+		const { query, assetType, category, licenseType, priceMin, priceMax, creatorId, tags, sortBy = query ? "relevance" : "name", sortOrder = "asc", maxResults = 10, skip = 0, countOnly = false } = queryInfo;
 
 		// Build MongoDB query
 		const matchConditions: any[] = [];
@@ -94,6 +96,12 @@ export class AssetService {
 			pipeline.push({ $match: { $and: matchConditions } });
 		}
 
+		if (countOnly) {
+			pipeline.push({ $count: "total" });
+			const countResult = await this.assetModel.aggregate(pipeline).exec();
+			return { results: [], count: countResult[0]?.total || 0 };
+		}
+
 		// Sort stage
 		const sort: any = {};
 		if (sortBy === "relevance" && query) {
@@ -105,7 +113,7 @@ export class AssetService {
 		} else if (sortBy === "name") {
 			sort["metadata.general.name"] = sortOrder === "asc" ? 1 : -1;
 		} else {
-			sort.score = { $meta: "textScore" }; // Default to relevance if query exists
+			sort["metadata.general.name"] = sortOrder === "asc" ? 1 : -1; // Default sort
 		}
 		pipeline.push({ $sort: sort });
 

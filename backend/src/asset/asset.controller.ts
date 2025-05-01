@@ -48,6 +48,7 @@ export class AssetController {
 
 			return res.status(HttpStatus.OK).json({ status: "success", data: assets });
 		} catch (err) {
+			console.log(`error`, err)
 			throw new CustomBadRequestException();
 		}
 	}

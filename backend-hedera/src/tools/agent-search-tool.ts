@@ -17,7 +17,7 @@ interface IAgent {
 }
 
 export class AgentSearchTool extends StructuredTool {
-  name = "search_ai_tools";
+  name = "search_ai_agents_from_marketplace";
   description =
     "Search for AI agents in Novix marketplace using natural language";
 

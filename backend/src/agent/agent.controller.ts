@@ -95,7 +95,7 @@ export class AgentController {
 
 			return res.status(HttpStatus.OK).json({ status: "success", data });
 		} catch (err) {
-			console.log("error", err)
+			console.log("error", err);
 			throw new CustomBadRequestException();
 		}
 	}
@@ -119,6 +119,17 @@ export class AgentController {
 			return res.status(HttpStatus.OK).json({ status: "success", data });
 		} catch (err) {
 			throw new CustomBadRequestException();
+		}
+	}
+
+	@Put("update/owner")
+	async transferAgentOwnerShip(@Body() body: { agentId: string; ownerId: string }, @Res() res: AppReply) {
+		try {
+			const data = await this.agentService.transferAgentOwnerShip(body.agentId, body.ownerId);
+
+			return res.status(HttpStatus.OK).json({ status: "success", data });
+		} catch (err) {
+			throw new CustomBadRequestException(err?.message);
 		}
 	}
 }

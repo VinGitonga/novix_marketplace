@@ -1,3 +1,4 @@
+import { TopicId } from "@hashgraph/sdk";
 import { StructuredTool } from "@langchain/core/tools";
 import axios from "axios";
 import { HederaAgentKit, TransferHBARResult } from "hedera-agent-kit";
@@ -13,6 +14,51 @@ interface IAgent {
   bio: string[];
   createdAt: string;
   price: number;
+}
+
+const dbBackendUrl = "http://localhost:6534";
+
+async function updateAgentToNewOwner(
+  agentData: any,
+  kit: HederaAgentKit,
+  newOwnerAccountId: string
+) {
+  try {
+    const rawResp = await axios.post<{
+      status: "success" | "error";
+      data: any;
+    }>(`${dbBackendUrl}/api/agents/update/owner`, {
+      agentId: agentData?._id,
+      ownerId: agentData?.owner?._id,
+    });
+
+    const resp = rawResp.data;
+
+    if (resp?.status === "success") {
+      const memo = `Tranfer Agent Owner`;
+      const message = `Transfered Agent: ${agentData?.name} from ${agentData?.owner?.accountId} to ${newOwnerAccountId} for ${agentData?.price} HBAR`;
+
+      const createTopicResult = await kit.createTopic(memo, true);
+
+      const dataRawResp = JSON.stringify(createTopicResult, null, 2);
+
+      const rawResp = JSON.parse(dataRawResp);
+
+      const submitResult = await kit.submitTopicMessage(
+        TopicId.fromString(rawResp["topicId"]),
+        message
+      );
+
+      const submitResp = submitResult.getRawResponse();
+
+      return rawResp["topicId"];
+    }
+
+    return null;
+  } catch (err) {
+    console.log("error", err);
+    return null;
+  }
 }
 
 export class AgentMakePaymentTool extends StructuredTool {
@@ -39,7 +85,7 @@ export class AgentMakePaymentTool extends StructuredTool {
       .describe("Maximum number of results to return (default: 1)"),
   });
 
-  constructor(private dbBackendUrl: string = "http://localhost:6534") {
+  constructor(private dbBackendUrl: string = dbBackendUrl) {
     super();
   }
 
@@ -80,25 +126,36 @@ export class AgentMakePaymentTool extends StructuredTool {
 
           const agentdataInfo = agentInfo.data.data;
 
-          console.log('agentdataInfo', agentdataInfo)
+          console.log("agentdataInfo", agentdataInfo);
 
           const transferResult = await kit.transferHbar(
             agentdataInfo.owner.accountId,
             String(agentdataInfo.price ?? "1")
           );
 
+          // update the new owner
+          // we should create a new topic as a details
+          const topicId = await updateAgentToNewOwner(
+            agentdataInfo,
+            kit,
+            accountId
+          );
+
+          const txLink = `https://hashscan/testnet/transaction/${
+            (
+              transferResult.getRawResponse() as TransferHBARResult
+            ).txHash.split("@")[1]
+          }`;
           return `Transfered ${
             agentdataInfo.price ?? "1"
-          } HBAR from account to owner's account. Transactio hash is: ${
-            (transferResult.getRawResponse() as TransferHBARResult).txHash
-          }`;
+          } HBAR from account to owner's account. Transaction Link is: ${txLink} with a verifiable Topic message at: ${topicId}`;
         }
 
         return `Unable to perform transaction at the moment`;
       }
       return `Unable to perform transaction at the moment`;
     } catch (err) {
-        console.log(`Erroroor`, err)
+      console.log(`Erroroor`, err);
     }
   }
 }
