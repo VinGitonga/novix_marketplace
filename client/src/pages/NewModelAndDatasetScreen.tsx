@@ -25,6 +25,8 @@ import { Button } from "@/components/ui/button";
 import { useWallet } from "@/providers/HashinalWalletProvider";
 import useAssetData from "@/hooks/useAssetsData";
 import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const GeneralSchema = z.object({
 	name: z.string().min(1, "Name is required"),
@@ -150,6 +152,7 @@ const NewModelAndDatasetScreen = () => {
 	const { createNewAsset } = useAssetData();
 
 	const { accountId } = useWallet();
+	const navigate = useNavigate();
 
 	const tabs = ["general", "technical", "benchmark", "license", "upload", "additional"];
 
@@ -172,6 +175,7 @@ const NewModelAndDatasetScreen = () => {
 		handleSubmit,
 		watch,
 		setValue,
+		reset,
 		formState: { errors },
 	} = formMethods;
 
@@ -205,12 +209,16 @@ const NewModelAndDatasetScreen = () => {
 			const resp = await createNewAsset(info as any);
 
 			if (resp?.status === "success") {
+				reset();
 				toast.success("Asset created successfully");
+				navigate("/app/assets");
 			} else {
 				toast.error("Failed to create an asset");
 			}
 		} catch (err) {
 			toast.error("Failed to create an asset");
+		} finally {
+			setIsSaving(true);
 		}
 	});
 
@@ -409,7 +417,8 @@ const NewModelAndDatasetScreen = () => {
 									<Button type="button" onClick={handlePrevious} variant="secondary" className="dark">
 										Previous
 									</Button>
-									<Button type="submit" variant="default" className="dark">
+									<Button type="submit" variant="default" className="dark" disabled={isSaving}>
+										{isSaving && <Loader2 className="w-5 h-5 mr-2" />}
 										Submit
 									</Button>
 								</div>
