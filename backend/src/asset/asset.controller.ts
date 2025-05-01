@@ -40,4 +40,15 @@ export class AssetController {
 			throw new CustomBadRequestException(err.message);
 		}
 	}
+
+	@Post("search/by-nlp")
+	async searchAssetsByNLP(@Body() body: any, @Res() res: AppReply) {
+		try {
+			const assets = await this.assetService.searchAssetsByNLP(body);
+
+			return res.status(HttpStatus.OK).json({ status: "success", data: assets });
+		} catch (err) {
+			throw new CustomBadRequestException();
+		}
+	}
 }

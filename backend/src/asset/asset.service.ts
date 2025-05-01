@@ -6,6 +6,21 @@ import { Model } from "mongoose";
 import { HttpService } from "@nestjs/axios";
 import { firstValueFrom } from "rxjs";
 
+interface SearchQueryInfo {
+	query?: string; // Text search query (e.g., "sentiment analysis")
+	assetType?: "model" | "dataset"; // Filter by asset type
+	category?: string; // Filter by category (e.g., "NLP")
+	licenseType?: string; // Filter by license type (e.g., "Commercial")
+	priceMin?: number; // Minimum price
+	priceMax?: number; // Maximum price
+	creatorId?: string; // Filter by creator_account_id
+	tags?: string[]; // Filter by tags
+	sortBy?: "relevance" | "price" | "size" | "name"; // Sort field
+	sortOrder?: "asc" | "desc"; // Sort direction
+	maxResults?: number; // Number of results to return (limit)
+	skip?: number; // Number of results to skip (pagination)
+}
+
 @Injectable()
 export class AssetService {
 	constructor(
@@ -34,6 +49,81 @@ export class AssetService {
 
 	async getAllAssets() {
 		return await this.assetModel.find({});
+	}
+
+	async searchAssetsByNLP(queryInfo: SearchQueryInfo) {
+		const { query, assetType, category, licenseType, priceMin, priceMax, creatorId, tags, sortBy = "relevance", sortOrder = "desc", maxResults = 10, skip = 0 } = queryInfo;
+
+		// Build MongoDB query
+		const matchConditions: any[] = [];
+
+		// Text search
+		if (query) {
+			matchConditions.push({ $text: { $search: query } });
+		}
+
+		// Filters
+		if (assetType) {
+			matchConditions.push({ "metadata.asset_type": assetType });
+		}
+		if (category) {
+			matchConditions.push({ "metadata.general.category": category });
+		}
+		if (licenseType) {
+			matchConditions.push({ "metadata.licensing.license_type": licenseType });
+		}
+		if (priceMin !== undefined || priceMax !== undefined) {
+			const priceFilter: any = {};
+			if (priceMin !== undefined) priceFilter.$gte = priceMin;
+			if (priceMax !== undefined) priceFilter.$lte = priceMax;
+			matchConditions.push({ "metadata.licensing.price": priceFilter });
+		}
+
+		if (creatorId) {
+			matchConditions.push({ "metadata.ownership.creator_account_id": creatorId });
+		}
+		if (tags && tags.length > 0) {
+			matchConditions.push({ "metadata.general.tags": { $in: tags } });
+		}
+
+		// Build aggregation pipeline
+		const pipeline: any[] = [];
+
+		// Match stage
+		if (matchConditions.length > 0) {
+			pipeline.push({ $match: { $and: matchConditions } });
+		}
+
+		// Sort stage
+		const sort: any = {};
+		if (sortBy === "relevance" && query) {
+			sort.score = { $meta: "textScore" };
+		} else if (sortBy === "price") {
+			sort["metadata.licensing.price"] = sortOrder === "asc" ? 1 : -1;
+		} else if (sortBy === "size") {
+			sort["metadata.general.size"] = sortOrder === "asc" ? 1 : -1;
+		} else if (sortBy === "name") {
+			sort["metadata.general.name"] = sortOrder === "asc" ? 1 : -1;
+		} else {
+			sort.score = { $meta: "textScore" }; // Default to relevance if query exists
+		}
+		pipeline.push({ $sort: sort });
+
+		// Pagination
+		pipeline.push({ $skip: skip });
+		pipeline.push({ $limit: maxResults });
+
+		// Execute query
+		const assets = await this.assetModel.aggregate(pipeline).exec();
+
+		// Get total count for pagination
+		const countPipeline = [...pipeline];
+		countPipeline.splice(-2, 2); // Remove skip and limit
+		countPipeline.push({ $count: "total" });
+		const countResult = await this.assetModel.aggregate(countPipeline).exec();
+		const total = countResult[0]?.total || 0;
+
+		return { results: assets, count: total };
 	}
 
 	private validateMetadata(metadata: Metadata) {

@@ -186,3 +186,26 @@ export class Asset extends Document {
 }
 
 export const AssetSchema = SchemaFactory.createForClass(Asset);
+
+AssetSchema.index({ "metadata.asset_type": 1 });
+AssetSchema.index({ "metadata.general.name": 1 });
+AssetSchema.index({ "metadata.general.description": 1 });
+AssetSchema.index({ "metadata.general.category": 1 });
+AssetSchema.index({ "metadata.general.tags": 1 });
+AssetSchema.index({ "metadata.licensing.license_type": 1 });
+AssetSchema.index({ "metadata.licensing.price": 1 });
+AssetSchema.index({ "metadata.ownership.creator_account_id": 1 });
+
+// Compound index for common filter combinations
+AssetSchema.index({
+	"metadata.asset_type": 1,
+	"metadata.general.category": 1,
+	"metadata.licensing.license_type": 1,
+});
+
+// Text index for basic text search
+AssetSchema.index({
+	"metadata.general.name": "text",
+	"metadata.general.description": "text",
+	"metadata.general.tags": "text",
+});
