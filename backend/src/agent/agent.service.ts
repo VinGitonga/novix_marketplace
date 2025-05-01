@@ -99,7 +99,7 @@ export class AgentService {
 	}
 
 	async getAgentDetails(id: string) {
-		return await this.agentModel.findById(id);
+		return await this.agentModel.findById(id).populate("owner");
 	}
 
 	async searchAgentsByNLP(queryInfo: { query: string; maxResults: number }) {

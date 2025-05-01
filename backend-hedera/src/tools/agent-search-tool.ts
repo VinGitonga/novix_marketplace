@@ -11,6 +11,9 @@ interface IAgent {
   topics: string[];
   bio: string[];
   createdAt: string;
+  price?: number;
+  credits?: number;
+  pricingModel?: string;
 }
 
 export class AgentSearchTool extends StructuredTool {
@@ -54,8 +57,12 @@ export class AgentSearchTool extends StructuredTool {
         let result = `Found ${count} AI Agent(s):\n\n`;
         results.forEach((agent, idx) => {
           result += `Agent: ${agent.name}\n`;
+          result += `AgentID: ${agent._id}\n`;
           result += `Summary: ${agent.summary}\n`;
           result += `Description: ${agent.description}\n`;
+          result += `Price: ${agent?.price ?? "Free Trial"}\n`;
+          result += `Credits: ${agent?.credits ?? "Free Trial"}\n`;
+          result += `PricingModel: ${agent?.pricingModel ?? "Free Trials"}\n`;
           result += `Topics: ${agent.topics.join(", ")}\n`;
           result += "\n";
         });

@@ -6,7 +6,7 @@ import { StructuredTool } from "@langchain/core/tools";
 import { AgentSearchTool } from "src/tools/agent-search-tool";
 
 export default class AgentSearchPlugin extends BasePlugin {
-  id = "ai-agent-search";
+  id = "ai-agent-search-make-payments";
   name = "AI Agent Search Plugin";
   description = "Provides tools to search for AI agents in the marketplace";
   version = "0.1.0";

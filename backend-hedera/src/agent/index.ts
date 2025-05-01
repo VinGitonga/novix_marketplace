@@ -34,6 +34,7 @@ import { AgentIdentity } from "../types/Agent";
 import { Logger } from "@hashgraphonline/standards-sdk";
 import { AGENT_PERSONALITY } from "../constants/app_agent_prompt";
 import AgentSearchPlugin from "src/plugins/agent-search-plugin";
+import AgentPaymentPlugin from "src/plugins/agent-payment-plugin";
 
 dotenv.config();
 
@@ -190,6 +191,7 @@ async function initializeAgent() {
     await pluginRegistry.registerPlugin(new DeFiPlugin());
     await pluginRegistry.registerPlugin(new HbarPricePlugin());
     await pluginRegistry.registerPlugin(new AgentSearchPlugin());
+    await pluginRegistry.registerPlugin(new AgentPaymentPlugin());
     const pluginTools = pluginRegistry.getAllTools();
     tools = [...tools, ...pluginTools];
 

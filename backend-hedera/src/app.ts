@@ -420,7 +420,6 @@ app.use("/api/agent", agentRoutes);
 app.use("/api/new-agents", newAgentsRoutes);
 app.use("/api/hcs-topics", hcsTopicRoutes);
 
-
 const server = http.createServer(app);
 
 const io = new Server(server, {
@@ -471,7 +470,8 @@ io.on("connection", (socket) => {
 
       // Process the stream chunks
       for await (const chunk of stream) {
-        // console.log("chunk", chunk); // chunk { output: 'Hello! How can I assist you today?' }
+        console.dir(chunk, { depth: null });
+       // console.log("chunk", chunk); // chunk { output: 'Hello! How can I assist you today?' }
         // Process operations in the chunk
         if (chunk.ops?.length > 0) {
           for (const op of chunk.ops) {
@@ -533,6 +533,7 @@ io.on("connection", (socket) => {
       // Signal completion
       socket.emit("message", { type: "done" });
     } catch (err) {
+      console.log("error", err);
       logger.error("Error in message handler:", err);
       socket.emit("error", {
         message: `Error streaming response: ${

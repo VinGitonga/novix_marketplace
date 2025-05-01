@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from "react";
 import { SignClientTypes } from "@walletconnect/types";
 import { HashinalsWalletConnectSDK } from "@hashgraphonline/hashinal-wc";
-import { LedgerId, PrivateKey } from "@hashgraph/sdk";
+import { AccountId, Hbar, LedgerId, PrivateKey, TransactionId, TransferTransaction } from "@hashgraph/sdk";
 import { WALLET_CONNECT_PROJECT_ID } from "@/env";
 import { BrowserHCSClient } from "@hashgraphonline/standards-sdk";
 
@@ -146,6 +146,13 @@ const HashinalWalletProvider = ({ children }: { children: ReactNode }) => {
 
 			try {
 				const receipt = await sdk.transferHbar(accountId, recipientId, amount);
+				const transaction = new TransferTransaction()
+					.setTransactionId(TransactionId.generate(accountId))
+					.addHbarTransfer(AccountId.fromString(accountId), new Hbar(-amount))
+					.addHbarTransfer(AccountId.fromString(recipientId), new Hbar(amount));
+
+				const signedTx = await transaction._freezeWithAccountId(AccountId.fromString(accountId));
+				const executedTx = signedTx
 
 				console.log("HBAR Transfer successful", receipt);
 				return receipt;

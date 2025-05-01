@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.27.0",
+    "@buidlerlabs/hashgraph-react-wallets": "^2.5.0",
+    "@hashgraph/sdk": "^2.63.0",
     "@hashgraphonline/hashinal-wc": "^1.0.96",
     "@hashgraphonline/standards-sdk": "^0.0.91",
     "@hookform/resolvers": "^5.0.1",

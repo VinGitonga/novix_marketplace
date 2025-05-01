@@ -2,6 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import useDisclosure from "@/hooks/useDisclosure";
+import { useWallet } from "@/providers/HashinalWalletProvider";
 import { IAgent } from "@/types/Agent";
 
 interface BuyDialogProps {
@@ -10,6 +11,14 @@ interface BuyDialogProps {
 
 function BuyDialog({ agentData }: BuyDialogProps) {
 	const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
+	const { transferHBAR } = useWallet();
+
+	const onClickPay = async () => {
+		try {
+			await transferHBAR("0.0.5914589",5)
+		} catch (err) {}
+	};
+
 	return (
 		<>
 			<Button
@@ -43,9 +52,9 @@ function BuyDialog({ agentData }: BuyDialogProps) {
 							</Badge>
 						</div>
 					</div>
-                    <div className="w-full">
-                        <Button className="w-full cursor-pointer">Pay with Hedera</Button>
-                    </div>
+					<div className="w-full">
+						<Button className="w-full cursor-pointer" onClick={onClickPay}>Pay with Hedera</Button>
+					</div>
 				</DialogContent>
 			</Dialog>
 		</>

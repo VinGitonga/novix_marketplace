@@ -635,3 +635,79 @@ Troubleshooting URL: https://js.langchain.com/docs/troubleshooting/errors/INVALI
 [2025-04-30 08:36:09.645 PM] [32minfo[39m: Server for Hedara Started on Port: 7834
 [2025-04-30 08:41:10.956 PM] [32minfo[39m: Server for Hedara Started on Port: 7834
 [2025-04-30 08:41:48.782 PM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-04-30 09:10:20.832 PM] [32minfo[39m: Socket.IO client connected: QW3YuBDsl_p7BlGOAAAC
+[2025-04-30 10:42:38.107 PM] [32minfo[39m: Socket.IO client disconnected: QW3YuBDsl_p7BlGOAAAC
+[2025-04-30 10:42:38.351 PM] [32minfo[39m: Socket.IO client connected: ouinjnTHBtm2FCBEAAAF
+[2025-04-30 11:10:08.874 PM] [32minfo[39m: Socket.IO client connected: JfrlHQrTeW-Fg3JjAAAI
+[2025-04-30 11:10:58.579 PM] [32minfo[39m: Socket.IO client disconnected: JfrlHQrTeW-Fg3JjAAAI
+[2025-04-30 11:17:18.454 PM] [32minfo[39m: Socket.IO client disconnected: ouinjnTHBtm2FCBEAAAF
+[2025-04-30 11:17:18.712 PM] [32minfo[39m: Socket.IO client connected: 3Iy1YQ6qie3u3_1aAAAL
+[2025-04-30 11:17:31.105 PM] [32minfo[39m: Socket.IO client disconnected: 3Iy1YQ6qie3u3_1aAAAL
+[2025-04-30 11:41:56.200 PM] [32minfo[39m: Socket.IO client connected: EWlUesEYN8LXeqL_AAAO
+[2025-04-30 11:44:35.073 PM] [32minfo[39m: Socket.IO client disconnected: EWlUesEYN8LXeqL_AAAO
+[2025-04-30 11:44:35.969 PM] [32minfo[39m: Socket.IO client connected: WQWGusn8Hu1OJQQfAAAR
+[2025-04-30 11:59:31.473 PM] [32minfo[39m: Socket.IO client connected: eIbS5WHGYK0OUwEXAAAU
+[2025-04-30 11:59:33.087 PM] [32minfo[39m: Socket.IO client disconnected: eIbS5WHGYK0OUwEXAAAU
+[2025-04-30 11:59:34.639 PM] [32minfo[39m: Socket.IO client connected: 51QYdwGt9E0jRsCuAAAX
+[2025-04-30 11:59:58.847 PM] [32minfo[39m: Socket.IO client disconnected: 51QYdwGt9E0jRsCuAAAX
+[2025-05-01 12:01:21.915 AM] [32minfo[39m: Socket.IO client connected: xaiJ3lxjBLAfwpJpAAAa
+[2025-05-01 12:01:32.706 AM] [32minfo[39m: Socket.IO client disconnected: xaiJ3lxjBLAfwpJpAAAa
+[2025-05-01 12:08:38.148 AM] [32minfo[39m: Socket.IO client disconnected: WQWGusn8Hu1OJQQfAAAR
+[2025-05-01 12:08:49.033 AM] [32minfo[39m: Socket.IO client connected: Ns7MPfpSA_ryw2TSAAAd
+[2025-05-01 12:11:50.043 AM] [32minfo[39m: Socket.IO client disconnected: Ns7MPfpSA_ryw2TSAAAd
+[2025-05-01 12:55:44.992 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-05-01 12:56:30.566 AM] [32minfo[39m: Socket.IO client connected: G0s1H7g59k-sKfkTAAAC
+[2025-05-01 12:56:36.714 AM] [32minfo[39m: Socket.IO client disconnected: G0s1H7g59k-sKfkTAAAC
+[2025-05-01 12:56:36.732 AM] [32minfo[39m: Socket.IO client connected: HAt51YzO0DFFXVbbAAAF
+[2025-05-01 01:03:27.474 AM] [31merror[39m: Error in message handler: Cannot read properties of undefined (reading 'map')
+[2025-05-01 01:04:44.055 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-05-01 01:04:46.824 AM] [32minfo[39m: Socket.IO client connected: 1HKfXxh0UDPl8kvAAAAB
+[2025-05-01 01:08:32.826 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-05-01 01:08:40.864 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-05-01 01:08:42.570 AM] [32minfo[39m: Socket.IO client connected: f7GCEIcRSwBVwRAVAAAB
+[2025-05-01 01:09:26.833 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-05-01 01:09:30.632 AM] [32minfo[39m: Socket.IO client connected: KvgyuYNYv1UXvmEcAAAB
+[2025-05-01 01:12:39.471 AM] [31merror[39m: Error in message handler: Cannot read properties of undefined (reading 'map')
+[2025-05-01 01:13:44.495 AM] [31merror[39m: Error in message handler: Cannot read properties of undefined (reading 'map')
+[2025-05-01 01:15:25.185 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-05-01 01:15:27.750 AM] [32minfo[39m: Socket.IO client connected: 7hrQ2HNhiWeOIHfWAAAB
+[2025-05-01 01:15:59.658 AM] [31merror[39m: Error in message handler: Cannot read properties of undefined (reading 'map')
+[2025-05-01 01:16:58.272 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-05-01 01:16:59.532 AM] [32minfo[39m: Socket.IO client connected: xI4ZnF88TfOJegB2AAAB
+[2025-05-01 01:17:10.368 AM] [31merror[39m: Error in message handler: Cannot read properties of undefined (reading 'map')
+[2025-05-01 01:17:46.764 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-05-01 01:17:47.927 AM] [32minfo[39m: Socket.IO client connected: sQftWc7pFWs6FyaLAAAB
+[2025-05-01 01:17:59.856 AM] [31merror[39m: Error in message handler: Cannot read properties of undefined (reading 'map')
+[2025-05-01 01:19:15.156 AM] [31merror[39m: Error in message handler: Cannot read properties of undefined (reading 'map')
+[2025-05-01 01:19:29.543 AM] [32minfo[39m: Socket.IO client disconnected: sQftWc7pFWs6FyaLAAAB
+[2025-05-01 01:19:30.184 AM] [32minfo[39m: Socket.IO client connected: C0JnsQwG0SvFMKSuAAAE
+[2025-05-01 01:24:11.836 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-05-01 01:24:14.761 AM] [32minfo[39m: Socket.IO client connected: 0qX2qbzsaazd7Ya3AAAB
+[2025-05-01 01:30:17.653 AM] [32minfo[39m: Socket.IO client disconnected: 0qX2qbzsaazd7Ya3AAAB
+[2025-05-01 01:30:18.757 AM] [32minfo[39m: Socket.IO client connected: KGWfyNQvzIE7V68iAAAE
+[2025-05-01 06:52:56.370 AM] [32minfo[39m: Socket.IO client connected: kLC4ECvfJUfj4U6yAAAH
+[2025-05-01 06:53:14.470 AM] [32minfo[39m: Socket.IO client disconnected: kLC4ECvfJUfj4U6yAAAH
+[2025-05-01 07:02:34.478 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-05-01 07:02:38.469 AM] [32minfo[39m: Socket.IO client connected: IsJBkgL0e9z4bbrWAAAB
+[2025-05-01 07:04:39.133 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-05-01 07:04:39.458 AM] [32minfo[39m: Socket.IO client connected: X7xknoZgG9VVnl4mAAAB
+[2025-05-01 07:04:49.118 AM] [32minfo[39m: Socket.IO client disconnected: X7xknoZgG9VVnl4mAAAB
+[2025-05-01 07:04:49.154 AM] [32minfo[39m: Socket.IO client connected: 6I84h0FLyyT-FQY9AAAE
+[2025-05-01 07:04:56.157 AM] [32minfo[39m: Socket.IO client disconnected: 6I84h0FLyyT-FQY9AAAE
+[2025-05-01 07:04:56.167 AM] [32minfo[39m: Socket.IO client connected: GAVQdzzmDQ-Q3rMWAAAH
+[2025-05-01 07:08:23.239 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-05-01 07:08:23.453 AM] [32minfo[39m: Socket.IO client connected: ktVavU-vRvJD8MAgAAAB
+[2025-05-01 07:50:42.393 AM] [32minfo[39m: Socket.IO client disconnected: ktVavU-vRvJD8MAgAAAB
+[2025-05-01 07:51:18.477 AM] [32minfo[39m: Socket.IO client connected: P-DKuCZp1gI42GCOAAAD
+[2025-05-01 08:06:11.652 AM] [32minfo[39m: Socket.IO client disconnected: P-DKuCZp1gI42GCOAAAD
+[2025-05-01 08:06:12.395 AM] [32minfo[39m: Socket.IO client connected: 3BogQkxyYtlmwRimAAAG
+[2025-05-01 08:31:57.790 AM] [32minfo[39m: Socket.IO client disconnected: 3BogQkxyYtlmwRimAAAG
+[2025-05-01 08:31:58.575 AM] [32minfo[39m: Socket.IO client connected: Mg8q2ZF4-aIb_oWeAAAJ
+[2025-05-01 08:36:59.981 AM] [32minfo[39m: Socket.IO client disconnected: Mg8q2ZF4-aIb_oWeAAAJ
+[2025-05-01 08:38:53.964 AM] [32minfo[39m: Socket.IO client connected: 0a8psd6f-WOpx3cMAAAM
+[2025-05-01 08:41:35.704 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-05-01 08:41:38.268 AM] [32minfo[39m: Socket.IO client connected: qQ0fCR8IsKsM0-3cAAAB
+[2025-05-01 08:43:04.454 AM] [32minfo[39m: Server for Hedara Started on Port: 7834
+[2025-05-01 08:43:10.264 AM] [32minfo[39m: Socket.IO client connected: swCMk3e40-xOf4FGAAAB
+[2025-05-01 08:49:44.576 AM] [32minfo[39m: Socket.IO client disconnected: swCMk3e40-xOf4FGAAAB
+[2025-05-01 08:49:44.710 AM] [32minfo[39m: Socket.IO client connected: Wx48wEhyUjur2A3VAAAE
