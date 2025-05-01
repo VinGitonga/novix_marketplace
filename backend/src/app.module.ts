@@ -5,10 +5,11 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
 import configuration from "./config/configuration";
 import { MongooseModule } from "@nestjs/mongoose";
 import { AgentModule } from "./agent/agent.module";
-import { MoonscapeModule } from './moonscape/moonscape.module';
-import { ConnectionManagerModule } from './connection-manager/connection-manager.module';
-import { UsersModule } from './users/users.module';
-import { AssetModule } from './asset/asset.module';
+import { MoonscapeModule } from "./moonscape/moonscape.module";
+import { ConnectionManagerModule } from "./connection-manager/connection-manager.module";
+import { UsersModule } from "./users/users.module";
+import { AssetModule } from "./asset/asset.module";
+import { UploadModule } from "./upload/upload.module";
 
 @Module({
 	imports: [
@@ -24,6 +25,7 @@ import { AssetModule } from './asset/asset.module';
 		MoonscapeModule,
 		UsersModule,
 		AssetModule,
+		UploadModule,
 		// ConnectionManagerModule,
 	],
 	controllers: [AppController],

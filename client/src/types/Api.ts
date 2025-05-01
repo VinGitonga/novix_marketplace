@@ -26,6 +26,7 @@ export const enum IApiEndpoint {
 	AGENTS_UPDATE_PRICING = "agents/update/pricing",
 	AGENTS_GET_MY_AGENTS = "agents/get/my",
 	AGENTS_GET_AGENT_CREDITS = "agents/credits/get",
+	ASSETS_CREATE = "assets/create",
 }
 
 export interface IMethodParams {

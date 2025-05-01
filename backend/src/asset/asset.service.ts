@@ -18,7 +18,7 @@ export class AssetService {
 		const hcsTopicId = await this.storeMetadataOnHCS(body);
 
 		const asset = new this.assetModel({
-			body,
+			metadata: body,
 			hcs_topic_id: hcsTopicId,
 		});
 		await asset.save();
@@ -51,7 +51,7 @@ export class AssetService {
 		const config = {
 			method: "post",
 			maxBodyLength: Infinity,
-			url: "http://localhost:7634/api/hcs-topics/create-topic-and-message",
+			url: "http://localhost:7834/api/hcs-topics/create-topic-and-message",
 			headers: {
 				Accept: "application/json",
 				"Content-Type": "application/json",
@@ -70,12 +70,14 @@ export class AssetService {
 
 			const resp = await firstValueFrom(observableResp);
 
+
 			if (resp?.data?.message) {
 				return resp.data?.createTopic?.["topicId"];
 			}
 
 			throw new Error("No topicId returned from HCS endpoint");
 		} catch (error) {
+			console.log('errror', error)
 			throw new Error("Failed to store metadata on HCS: " + error.message);
 		}
 	}
