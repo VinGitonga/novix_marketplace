@@ -24,7 +24,7 @@ async function updateAgentToNewOwner(
   newOwnerAccountId: string
 ) {
   try {
-    const rawResp = await axios.post<{
+    const rawResp = await axios.put<{
       status: "success" | "error";
       data: any;
     }>(`${dbBackendUrl}/api/agents/update/owner`, {
@@ -85,7 +85,7 @@ export class AgentMakePaymentTool extends StructuredTool {
       .describe("Maximum number of results to return (default: 1)"),
   });
 
-  constructor(private dbBackendUrl: string = dbBackendUrl) {
+  constructor(private dbBackendUrl: string = "http://localhost:6534") {
     super();
   }
 
@@ -141,14 +141,11 @@ export class AgentMakePaymentTool extends StructuredTool {
             accountId
           );
 
-          const txLink = `https://hashscan/testnet/transaction/${
-            (
-              transferResult.getRawResponse() as TransferHBARResult
-            ).txHash.split("@")[1]
-          }`;
           return `Transfered ${
             agentdataInfo.price ?? "1"
-          } HBAR from account to owner's account. Transaction Link is: ${txLink} with a verifiable Topic message at: ${topicId}`;
+          } HBAR from account to owner's account. Transaction Hash is: ${
+            (transferResult.getRawResponse() as TransferHBARResult).txHash
+          } with a verifiable Topic message at Topic ${topicId}`;
         }
 
         return `Unable to perform transaction at the moment`;

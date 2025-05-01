@@ -5,7 +5,7 @@ export class Credits {
 	@Prop({ type: Number, required: true, min: 0 })
 	count: number;
 
-	@Prop({ required: true, unique: true })
+	@Prop({ required: true })
 	accountId: string;
 
 	@Prop({ required: true })

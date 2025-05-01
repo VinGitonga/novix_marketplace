@@ -232,11 +232,13 @@ const Playground = () => {
 				`${ELIZA_BACKEND_API_URL}/agents/rooms/${agentDetails?.elizaId}`
 			);
 
-			const resp = rawResp.data;
+			const resp = rawResp.data as any;
 
-			console.log("resp", resp);
+			if (resp?.length === 0) {
+				createRoom();
+			}
 		} catch (err) {
-			// createRoom()
+			createRoom();
 		}
 	};
 
@@ -266,7 +268,7 @@ const Playground = () => {
 
 	useEffect(() => {
 		getMemories();
-		// getRoomDetails();
+		getRoomDetails();
 	}, [agentDetails, account]);
 
 	return (

@@ -79,6 +79,7 @@ const HashinalWalletProvider = ({ children }: { children: ReactNode }) => {
 
 		try {
 			setIsConnecting(true);
+			console.log('sdk', sdk)
 			const { accountId: newAccountId, balance: newBalance } = await sdk.connectWallet(WALLET_CONNECT_PROJECT_ID, APP_METADATA);
 
 			setAccountId(newAccountId);

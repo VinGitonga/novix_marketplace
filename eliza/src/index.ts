@@ -349,7 +349,7 @@ const initCharacter = async ({ runtime }: { runtime: IAgentRuntime }) => {
   logger.info("Initializing character");
   logger.info("Name: ", character.name);
   console.log("Here");
-  // await runExpress(runtime);
+  await runExpress(runtime);
 };
 
 export const projectAgent: ProjectAgent = {
