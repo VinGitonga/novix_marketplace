@@ -67,6 +67,8 @@ export class AgentSearchTool extends StructuredTool {
           result += "\n";
         });
 
+        console.log(`result`, result)
+
         return result;
       }
     } catch (err) {

@@ -459,8 +459,6 @@ const AgentDetailsCard: FC<{ agentData: IAgent }> = ({ agentData }) => {
 	// Randomly select an image from the images array
 	const randomImage = images[Math.floor(Math.random() * images.length)];
 
-	console.log("agentData", agentData);
-
 	return (
 		<div style={{ backgroundImage: `url(${randomImage})` }} className="w-full bg-cover bg-center px-4 py-5 rounded-lg shadow-lg min-h-48 h-full">
 			<div className="space-y-8">

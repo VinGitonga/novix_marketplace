@@ -28,12 +28,16 @@ interface AgentOutMeta {
 interface ParseAgentListResult {
 	agents: AgentOutMeta[];
 	footerMessage?: string;
+	headerContent?: string;
 }
 
 interface AgentListProps {
 	agents: AgentOutMeta[];
 	footerMessage?: string;
+	headerContent?: string;
 }
+
+const images = ["/images/bg/card-bg-1.png", "/images/bg/card-bg-2.png", "/images/bg/card-bg-4.png", "/images/bg/card-bg-5.png", "/images/bg/card-bg-6.png"];
 
 // const isAgentList = (message: string | undefined): boolean => {
 // 	if (!message) return false;
@@ -135,6 +139,7 @@ interface AgentOutMeta {
 interface ParseAgentListResult {
 	agents: AgentOutMeta[];
 	footerMessage?: string;
+	headerContent?: string;
 }
 
 const parseAgentList = (message: string): ParseAgentListResult => {
@@ -149,8 +154,10 @@ const parseAgentList = (message: string): ParseAgentListResult => {
 	// Find header/title line to skip it
 	const lines = contentWithoutFooter.split("\n");
 	let startLine = 0;
+	let headerContent: string | undefined;
 	if (lines[0] && !lines[0].match(/^\d+\./)) {
 		startLine = 1; // Skip the header line
+		headerContent = lines[0].trim(); // Capture the header content
 	}
 
 	// Join lines back after skipping header
@@ -171,7 +178,7 @@ const parseAgentList = (message: string): ParseAgentListResult => {
 			summary: "",
 			description: "",
 			topics: [],
-			id: name.toLowerCase().replace(/\s+/g, "-"),
+			id: "",
 		};
 
 		// Extract fields from details
@@ -211,7 +218,7 @@ const parseAgentList = (message: string): ParseAgentListResult => {
 		agents.push(agent);
 	}
 
-	return { agents, footerMessage };
+	return { agents, footerMessage, headerContent };
 };
 
 // Improved detection for agent lists
@@ -459,7 +466,11 @@ const ChatScreen = () => {
 												{/* Message content */}
 												{isList ? (
 													<div className="mt-4">
-														<AgentList agents={parseAgentList(msg.message).agents} footerMessage={parseAgentList(msg.message).footerMessage} />
+														<AgentList
+															agents={parseAgentList(msg.message).agents}
+															footerMessage={parseAgentList(msg.message).footerMessage}
+															headerContent={parseAgentList(msg.message).headerContent}
+														/>
 													</div>
 												) : (
 													<p className={cn("text-sm whitespace-pre-wrap", msg.type === "thinking" && "italic text-gray-300")}>{msg.message}</p>
@@ -527,39 +538,50 @@ const ChatScreen = () => {
 	);
 };
 
-const AgentList = ({ agents, footerMessage }: AgentListProps) => {
+const AgentList = ({ agents, footerMessage, headerContent }: AgentListProps) => {
 	return (
 		<div className="space-y-4">
+			{footerMessage && (
+				<div className="text-start">
+					<p className="text-sm text-gray-300 bg-gray-800/80 px-4 py-2 rounded-xl inline-block">{headerContent}</p>
+				</div>
+			)}
 			<div className="grid gap-4 md:grid-cols-2">
-				{agents.map((agent, index) => (
-					<Card key={index} className="bg-gray-800/80 border-gray-700 flex flex-col h-full">
-						<CardHeader>
-							<CardTitle className="text-sm font-semibold text-white">{agent.name}</CardTitle>
-						</CardHeader>
-						<CardContent className="flex flex-col flex-grow">
-							<div className="flex-grow">
-								<p className="text-xs text-gray-300 mb-2">
-									<span className="font-medium">Summary:</span> {agent.summary}
-								</p>
-								<p className="text-xs text-gray-300 mb-4">
-									<span className="font-medium">Description:</span> {agent.description}
-								</p>
-								<div className="flex flex-wrap gap-2">
-									{agent.topics.map((topic, idx) => (
-										<Badge key={idx} variant="secondary" className="bg-gray-700 text-gray-200 text-xs">
-											{topic}
-										</Badge>
-									))}
-								</div>
-							</div>
-							<div className="mt-4">
-								<Link to={`/public/agent-details/${agent.id}`}>
-									<Button size="sm">Try</Button>
-								</Link>
-							</div>
-						</CardContent>
-					</Card>
-				))}
+				{agents.map((agent, index) => {
+					const randomImage = images[Math.floor(Math.random() * images.length)];
+					return (
+						<div className="bg-transparent">
+							<Card key={index} style={{ backgroundImage: `url(${randomImage})` }} className="bg-cover bg-center flex flex-col h-full bg-gray-800">
+								<CardHeader>
+									<CardTitle className="text-sm font-semibold text-white">{agent.name}</CardTitle>
+								</CardHeader>
+								<CardContent className="flex flex-col flex-grow">
+									<div className="flex-grow">
+										<p className="text-xs text-gray-300 mb-2">
+											<span className="font-medium">Summary:</span> {agent.summary}
+										</p>
+										<p className="text-xs text-gray-300 mb-4">
+											<span className="font-medium">Description:</span> {agent.description}
+										</p>
+										<div className="flex flex-wrap gap-2">
+											{agent.topics.map((topic, idx) => (
+												<Badge key={idx} variant="secondary" className="bg-gray-700 text-gray-200 text-xs">
+													{topic}
+												</Badge>
+											))}
+										</div>
+									</div>
+									<div className="mt-4 flex items-center justify-between">
+										<Badge>{agent?.price} HBAR</Badge>
+										<Link to={`/public/agent-details/${agent.id}`}>
+											<Button size="sm">Try</Button>
+										</Link>
+									</div>
+								</CardContent>
+							</Card>
+						</div>
+					);
+				})}
 			</div>
 			{footerMessage && (
 				<div className="text-center">

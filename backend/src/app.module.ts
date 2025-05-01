@@ -8,6 +8,7 @@ import { AgentModule } from "./agent/agent.module";
 import { MoonscapeModule } from './moonscape/moonscape.module';
 import { ConnectionManagerModule } from './connection-manager/connection-manager.module';
 import { UsersModule } from './users/users.module';
+import { AssetModule } from './asset/asset.module';
 
 @Module({
 	imports: [
@@ -22,6 +23,7 @@ import { UsersModule } from './users/users.module';
 		AgentModule,
 		MoonscapeModule,
 		UsersModule,
+		AssetModule,
 		// ConnectionManagerModule,
 	],
 	controllers: [AppController],

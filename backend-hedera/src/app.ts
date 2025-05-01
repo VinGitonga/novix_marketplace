@@ -470,8 +470,8 @@ io.on("connection", (socket) => {
 
       // Process the stream chunks
       for await (const chunk of stream) {
-        console.dir(chunk, { depth: null });
-       // console.log("chunk", chunk); // chunk { output: 'Hello! How can I assist you today?' }
+        // console.dir(chunk, { depth: null });
+       console.log("chunk", chunk); // chunk { output: 'Hello! How can I assist you today?' }
         // Process operations in the chunk
         if (chunk.ops?.length > 0) {
           for (const op of chunk.ops) {

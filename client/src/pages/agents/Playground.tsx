@@ -9,11 +9,13 @@ import { cn } from "@/lib/utils";
 import { IAgent } from "@/types/Agent";
 import { IApiEndpoint } from "@/types/Api";
 import axios from "axios";
+import { Loader2, PlayIcon } from "lucide-react";
 import { FC, useEffect, useState } from "react";
 import { GoArrowUp } from "react-icons/go";
 import { TbPencilDiscount } from "react-icons/tb";
 import { Img } from "react-image";
 import { useParams } from "react-router-dom";
+import { toast } from "sonner";
 import useSWR from "swr";
 
 interface Agent {
@@ -110,10 +112,12 @@ const maxCharacters = 2000;
 const Playground = () => {
 	const params = useParams();
 	const [input, setInput] = useState<string>("");
+	const [isStarting, setIsStarting] = useState<boolean>(false);
 	const [messages, setMessages] = useState<{ createdAt: number; text: string; source: string }[]>([]);
 
 	const { account } = useAuthStore();
 	const { updateCreditsForUser } = useAgentsUtils();
+	const { startElizaAgent } = useAgentsUtils();
 	const [loading, setLoading] = useState<boolean>(false);
 
 	const { data: agentDetails, isLoading } = useSWR<IAgent>(!params.agentId ? undefined : [`${IApiEndpoint.AGENTS_GET_DETAILS}/${params.agentId}`], swrFetcher, { keepPreviousData: true });
@@ -121,6 +125,23 @@ const Playground = () => {
 	const { data: creditsData, mutate: mutateCredits } = useSWR<{ _id: string; count: number }>(!account ? null : [`${IApiEndpoint.AGENTS_GET_AGENT_CREDITS}/${account?.accountId}/${agentDetails?._id}`], swrFetcher, {
 		keepPreviousData: true,
 	});
+
+	const onClickStartElizaAgent = async () => {
+		setIsStarting(true);
+		try {
+			const resp = await startElizaAgent(agentDetails?.elizaId!);
+			if (resp?.status === "success") {
+				toast.success("Agent Started Successfully");
+				mutate();
+			} else {
+				toast.error("Unable to start the agent");
+			}
+		} catch (err) {
+			toast.error("Unable to start the agent");
+		} finally {
+			setIsStarting(false);
+		}
+	};
 
 	const sendMsg = async () => {
 		if (!input.trim() || input.length > maxCharacters) {
@@ -277,6 +298,11 @@ const Playground = () => {
 							</div>
 						</div>
 						<h1 className="text-4xl font-bold">{agentDetails?.name}</h1>
+						{status !== "active" && (
+							<Button size={"icon"} onClick={onClickStartElizaAgent} disabled={isStarting}>
+								{isStarting ? <Loader2 className="animate-spin" /> : <PlayIcon />}
+							</Button>
+						)}
 						<p className="text-white/80">{agentDetails?.summary}</p>
 					</div>
 					<div className="mt-10 *:w-full md:w-4/5 mx-auto">
@@ -305,6 +331,7 @@ const Playground = () => {
 										}
 									}
 								}}
+								disabled={status !== "active"}
 								placeholder="A chat AI agent that can allow me communicate with multiple people..."
 								className="w-full bg-transparent text-white/80 placeholder:text-[#949494]/50 text-sm focus:outline-none transition duration-200 ease-in-out"
 							/>

@@ -7,6 +7,8 @@ import ChatScreen from "@/pages/ChatScreen";
 import { ConnectionsList } from "@/pages/Connections";
 import Dashboard from "@/pages/Dashboard";
 import HomeScreen from "@/pages/HomeScreen";
+import MyAssetsScreen from "@/pages/MyAssetsScreen";
+import NewModelAndDatasetScreen from "@/pages/NewModelAndDatasetScreen";
 import PublicAgentDetailsScreen from "@/pages/PublicAgentDetailsScreen";
 import { createBrowserRouter } from "react-router-dom";
 
@@ -61,8 +63,16 @@ const router = createBrowserRouter([
 			},
 			{
 				path: "connections",
-				element: <ConnectionsList />
-			}
+				element: <ConnectionsList />,
+			},
+			{
+				path: "assets",
+				element: <MyAssetsScreen />,
+			},
+			{
+				path: "assets/new",
+				element: <NewModelAndDatasetScreen />,
+			},
 		],
 	},
 ]);

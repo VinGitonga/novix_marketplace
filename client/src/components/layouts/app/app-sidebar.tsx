@@ -49,25 +49,17 @@ const data = {
 			],
 		},
 		{
-			title: "Connected Databases",
-			url: "#",
+			title: "Assets",
+			url: "/app/assets",
 			icon: SquareTerminal,
 			items: [
 				{
-					title: "All Connections",
-					url: "/app/connections",
+					title: "My Assets",
+					url: "/app/assets",
 				},
 				{
-					title: "Systra KSA Staging",
-					url: "#",
-				},
-				{
-					title: "Blossom Babilou Preprod",
-					url: "#",
-				},
-				{
-					title: "HEC Qatar Prod",
-					url: "#",
+					title: "New Asset",
+					url: "/app/assets/new",
 				},
 			],
 		},

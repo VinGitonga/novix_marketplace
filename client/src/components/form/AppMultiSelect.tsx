@@ -1,20 +1,31 @@
-"use client";
 import { IOption } from "@/types/Option";
 import clsx from "clsx";
 import { ChevronDownIcon, XIcon } from "lucide-react";
 import { useCallback } from "react";
+import { Control } from "react-hook-form";
 import Select, { ClearIndicatorProps, DropdownIndicatorProps, components } from "react-select";
 import makeAnimated from "react-select/animated";
+import { FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 
-interface AppMultiSelectProps {
-	label: string;
-	options: (IOption | string)[];
-	value?: IOption[];
-	setValue?: (value: IOption[]) => void;
-	onChange?: (value: IOption[]) => void;
+type CommonProps = {
+	label?: string;
 	helperText?: string;
 	placeholder?: string;
+	options: IOption[];
+};
+
+interface UnControlledProps extends CommonProps {
+	value?: string;
+	setValue?: (value: IOption[]) => void;
+	onChange?: (value: IOption[]) => void;
 }
+
+interface ControlledProps extends CommonProps {
+	name: string;
+	control: Control<any>;
+}
+
+type AppMultiSelectProps = UnControlledProps | ControlledProps;
 
 const DropdownIndicator = (props: DropdownIndicatorProps) => {
 	return (
@@ -65,7 +76,8 @@ const optionStyles = {
 const noOptionsMessageStyles = "text-gray-500 p-2 bg-gray-50 dark:bg-gray-700 border border-dashed border-gray-200 rounded-sm";
 const containerStyles = "dark bg-white rounded-lg border border-gray-200 z-50 dark:bg-gray-800";
 
-const AppMultiSelect = ({ label, options, value, setValue, onChange, helperText, placeholder = "Select one or more options ..." }: AppMultiSelectProps) => {
+const AppMultiSelect = (props: AppMultiSelectProps) => {
+	const { label, placeholder = "Select one or more options ...", options, helperText } = props;
 	const getOptionItem = useCallback((item: (typeof options)[0]) => {
 		const isValue = typeof item === "string";
 
@@ -74,6 +86,81 @@ const AppMultiSelect = ({ label, options, value, setValue, onChange, helperText,
 
 		return { value: v, label: l };
 	}, []);
+	console.log("props", props);
+
+	const isControlled = "control" in props;
+
+	if (isControlled) {
+		const { name, control } = props;
+
+		return (
+			<FormField
+				name={name}
+				control={control}
+				render={({ field }) => (
+					<FormItem>
+						{label && <FormLabel className="font-inter">{label}</FormLabel>}
+						<Select
+							isMulti
+							hideSelectedOptions={true}
+							options={options.map((opt) => getOptionItem(opt)) as any}
+							value={field.value}
+							onChange={(val) => {
+								field.onChange(val);
+							}}
+							placeholder={placeholder}
+							className="text-sm"
+							components={animatedComponents}
+							styles={{
+								input: (base) => ({
+									...base,
+									"input:focus": {
+										boxShadow: "none !important",
+									},
+								}),
+								// On mobile, the label will truncate automatically, so we want to
+								// override that behaviour.
+								multiValueLabel: (base) => ({
+									...base,
+									whiteSpace: "normal",
+									overflow: "visible",
+								}),
+								control: (base) => ({
+									...base,
+									transition: "none",
+								}),
+							}}
+							unstyled
+							classNames={{
+								control: ({ isFocused }) => clsx(isFocused ? controlStyles.focus : controlStyles.nonFocus, controlStyles.base, !isFocused && "z-0"),
+								placeholder: () => placeholderStyles,
+								input: () => selectInputStyles,
+								valueContainer: () => valueContainerStyles,
+								singleValue: () => singleValueStyles,
+								multiValue: () => multiValueStyles,
+								multiValueLabel: () => multiValueLabelStyles,
+								multiValueRemove: () => multiValueRemoveStyles,
+								indicatorsContainer: () => indicatorsContainerStyles,
+								clearIndicator: () => clearIndicatorStyles,
+								indicatorSeparator: () => indicatorSeparatorStyles,
+								dropdownIndicator: () => dropdownIndicatorStyles,
+								menu: () => menuStyles,
+								groupHeading: () => groupHeadingStyles,
+								option: ({ isFocused, isSelected }) => clsx(isFocused && optionStyles.focus, isSelected && optionStyles.selected, optionStyles.base),
+								noOptionsMessage: () => noOptionsMessageStyles,
+								container: (state) => clsx(containerStyles, !state.isFocused && "z-0"),
+							}}
+						/>
+						{helperText && <p className="text-xs text-gray-500">{helperText}</p>}
+						<FormMessage />
+					</FormItem>
+				)}
+			/>
+		);
+	}
+
+	const { value, setValue, onChange } = props;
+
 	return (
 		<div className="flex flex-col w-full font-inter">
 			<p className="text-sm mb-2">{label}</p>
@@ -82,7 +169,7 @@ const AppMultiSelect = ({ label, options, value, setValue, onChange, helperText,
 				hideSelectedOptions={true}
 				options={options.map((opt) => getOptionItem(opt)) as any}
 				value={value}
-				onChange={(val) => {
+				onChange={(val: any) => {
 					setValue && setValue(val as IOption[]);
 					onChange && onChange(val as IOption[]);
 				}}

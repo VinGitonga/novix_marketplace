@@ -1,4 +1,3 @@
-"use client";
 import { cn } from "@/lib/utils";
 import { IOption } from "@/types/Option";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
@@ -8,7 +7,7 @@ import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import useDisclosure from "@/hooks/useDisclosure";
 import { Control } from "react-hook-form";
-import { FormControl, FormField, FormItem, FormLabel } from "../ui/form";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 
 type CommonProps = {
 	label?: string;
@@ -87,6 +86,7 @@ const AppCombobox = (props: AppComboboxProps) => {
 								</Command>
 							</PopoverContent>
 						</Popover>
+						<FormMessage />
 					</FormItem>
 				)}
 			/>
