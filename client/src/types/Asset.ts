@@ -72,3 +72,9 @@ export interface IMetadata {
 	storage: IStorage;
 	additional?: IAdditional;
 }
+
+export interface IAssetInfo {
+	metadata: IMetadata;
+	_id: string;
+	hcs_topic_id: string;
+}

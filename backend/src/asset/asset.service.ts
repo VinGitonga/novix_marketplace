@@ -26,6 +26,16 @@ export class AssetService {
 		return asset;
 	}
 
+	async getMyAssets(account_id: string) {
+		const data = await this.assetModel.find({ "metadata.ownership.creator_account_id": account_id });
+
+		return data;
+	}
+
+	async getAllAssets() {
+		return await this.assetModel.find({});
+	}
+
 	private validateMetadata(metadata: Metadata) {
 		if (!["model", "dataset"].includes(metadata.asset_type)) {
 			throw new Error("Invalid asset_type");
@@ -70,14 +80,13 @@ export class AssetService {
 
 			const resp = await firstValueFrom(observableResp);
 
-
 			if (resp?.data?.message) {
 				return resp.data?.createTopic?.["topicId"];
 			}
 
 			throw new Error("No topicId returned from HCS endpoint");
 		} catch (error) {
-			console.log('errror', error)
+			console.log("errror", error);
 			throw new Error("Failed to store metadata on HCS: " + error.message);
 		}
 	}
